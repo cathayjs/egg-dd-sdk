@@ -10,8 +10,6 @@ module.exports = app => {
   const ddConfig = app.config.DD_CONFIG;
   const agentIdConfig = ddConfig.agentId || {};
 
-
-
   class Dd extends app.Service {
     constructor(ctx) {
       super(ctx);

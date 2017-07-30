@@ -1,12 +1,12 @@
 {
     "name": "egg-dd-sdk",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "eggPlugin": {},
     "scripts": {
         "test": "egg-bin test"
     },
     "dependencies": {
-        "nodejs-dd-aes": "^0.0.2"
+        "nodejs-dd-aes": "^0.0.3"
     },
     "devDependencies": {
         "egg": "1.1.0",
@@ -30,5 +30,11 @@
         "power-assert": "^1.4.2",
         "pre-commit": "1.x",
         "supertest": "^2.0.1"
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/cathayjs/egg-dd-sdk.git"
+    },
+    "license": "MIT",
+    "author": "johnnychq <johnnychq@gmail.com>"
 }
