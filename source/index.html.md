@@ -12,7 +12,7 @@ includes:
 search: true
 ---
 
-# 关于
+# About
 
 由于钉钉未提供nodejs sdk，初次用nodejs对应相应接口时比较费时费力，所以将项目中的钉钉对接接口整理出来，以`egg插件`的方式提供呈现。
 
@@ -29,6 +29,7 @@ search: true
   1. 提供了统一的配置管理
   2. 提供统一的工具调用方式
   3. 提供统一的service调用方式
+  4. 统一的日志服务
 
 
 <aside class="notice">
@@ -38,7 +39,7 @@ search: true
 
 
 
-# 配置文件
+# DD-CONFIG
 
 
 > 在config/config.default.js中
@@ -54,7 +55,11 @@ search: true
     },
     aesKey: "1234567890123456789012345678901234567890abc",
     token: "abcdef",
-    nonceStr: "123456"
+    nonceStr: "123456",
+    sso: {
+      appId: "dingoakznbgimtvtwk49i1",
+      appSecret: "dlDOTzrLsB5XV5aciVsgEu_76KatMgbWgsWJkxsE54fY64D22MIs2ccXkqH6k5gK"
+    }
   };
 ```
 
@@ -72,10 +77,12 @@ agentId(Object) | {key, value} = `Object` | 其中 key 为 `agentIdType`, value�
 aesKey | `String`(43) | AES加解密时需要的一个secretKey，长度43位，自己定义
 token | `String`(6) | aes加解密及签名时用到, len=6
 nonceStr| `String`(6) | aes加解密及签名时用到, len=6
+sso.appId| `String`| 钉钉扫码登陆的appId
+sso.appSecret| `String`| 钉钉扫码登陆的appSecret
 
 
 
-# 工具类
+# DD-utils
 
 > 钉钉通信加解密:
 
@@ -103,7 +110,7 @@ let parsed = aes.decode(encoded.encrypt, encoded.timeStamp, encoded.nonce, encod
 进行加解密，必须配置`aesKey`, `token`
 </aside>
 
-## `aes.encode()`参数说明
+## aes.encode()
 
 ```javascript
 // step2: encode(encodeString, timestamp, nonceString);
@@ -116,7 +123,7 @@ let encoded = aes.encode('success', 1500957302881, 'KOHjp9ss');
 * timestamp: 随机时间戳，毫秒时
 * nonceString: 随机nonce字符，6位
 
-## `aes.decode()`参数说明
+## aes.decode()
 
 ```javascript
 // step3: decode(decodeString, timestamp, nonceString, decodeStringSignature)
@@ -130,21 +137,81 @@ let parsed = aes.decode(encoded.encrypt, encoded.timeStamp, encoded.nonce, encod
 * decodeStringSignature: 加密字符串配对的decodeStringSignature(钉钉会同加密字符串一起发给你)
 
 
-# service
+# DD-Service API
 
-大头是service, 对常见的dd api进行了封装
+service是SDK的核心, 对常见的 dd api 进行了封装~
 
-文档 TO BE CONTINUE...
+<aside class="notice">
+关于性能优化：所有service与钉钉通信时都有一个`accessToken`授权认证的过程，为了提高性能需要把`accessToken`缓存下来。
+`egg-dd-sdk`中处理了这部分的性能优化，需要你在egg框架中启用`egg-redis`插件。如果未启用，则不进行accessToken缓存策略。
+</aside>
 
-## 基本service
+## General Service
 
-## 用户相关service
+### `this.ctx.service.dd.getToken()`
+### `this.ctx.service.dd.sendMessageByDdUserId(ddUserId, messageObj, agentIdType)`
 
-## 部门相关service
+* [钉钉官方文档-企业会话消息接口](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7386797.0.0.rD6Zgg&treeId=172&articleId=104973&docType=1)
+* [钉钉官方文档-消息类型及数据格式](https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.HTFncJ&treeId=172&articleId=104972&docType=1)
 
-## SNS相关service
 
-## 注册事件回调相关service
+### `this.ctx.service.dd.getJsApiConfig(originUrl, agentIdType)`
 
-## 审批及流程相关service
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.qw2yFM&treeId=171&articleId=104910&docType=1)
 
+### `this.ctx.service.dd.getUserInfo(code)`
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.p1ESs4&treeId=172&articleId=104969&docType=1)
+
+
+## User Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.6nS7Sz&treeId=172&articleId=104979&docType=1#s6)
+
+### `this.ctx.service.ddUser.getUser(userId)`
+### `this.ctx.service.ddUser.getUsers(departmentId, casade = true)`
+
+钉钉官方api中无法递归获取部门中的员工数据，本接口封装了这部分，当`casade=true`时，递归后去，默认为true
+
+### `this.ctx.service.ddUser.getUsersByDepartment(departmentId)`
+
+钉钉官方api获取部门用户时，会有分页概念，本接口屏蔽了分页逻辑，默认返回返回部门下的所有员工。
+
+### `this.ctx.service.ddUser.createUser(userInfo)`
+### `this.ctx.service.ddUser.updateUser(userInfo)`
+### `this.ctx.service.ddUser.deleteUser(userId)`
+
+## Department Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s0)
+
+### `this.ctx.service.getDepartment(departmentId)`
+### `this.ctx.service.getDepartments(parentId)`
+### `this.ctx.service.updateDepartment(departmentInfo)`
+### `this.ctx.service.deleteDepartment(departmentId)`
+
+## SNS Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&treeId=172&articleId=104968&docType=1#s0)
+
+### `this.ctx.service.getToken()`
+### `this.ctx.service.getPersistentCode(tmpAuthCode)`
+### `this.ctx.service.getSnsToken(persistentCodeOptions)`
+### `this.ctx.service.getUserInfo(snsToken)`
+### `this.ctx.service.getUserByPersistentCode(persistentCode)`
+
+## Events Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&treeId=172&articleId=104968&docType=1#s0)
+
+### `this.ctx.service.registerEvents(callbackUrl, events, isUpdate = false)`
+### `this.ctx.service.updateEvents(events)`
+### `this.ctx.service.deleteEvents()`
+### `this.ctx.service.queryEvents()`
+
+## Process Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.rgrrdz&treeId=355&articleId=29498&docType=2)
+
+### `this.ctx.service.createProcess(options)`
+### `this.ctx.service.listProcess()`
