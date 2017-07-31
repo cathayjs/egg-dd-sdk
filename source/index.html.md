@@ -186,33 +186,33 @@ service是SDK的核心, 对常见的 dd api 进行了封装~
 
 * [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s0)
 
-### `this.ctx.service.getDepartment(departmentId)`
-### `this.ctx.service.getDepartments(parentId)`
-### `this.ctx.service.updateDepartment(departmentInfo)`
-### `this.ctx.service.deleteDepartment(departmentId)`
+### `this.ctx.service.ddDepartment.getDepartment(departmentId)`
+### `this.ctx.service.ddDepartment.getDepartments(parentId)`
+### `this.ctx.service.ddDepartment.updateDepartment(departmentInfo)`
+### `this.ctx.service.ddDepartment.deleteDepartment(departmentId)`
 
 ## SNS Service
 
 * [钉钉官方文档](https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&treeId=172&articleId=104968&docType=1#s0)
 
-### `this.ctx.service.getToken()`
-### `this.ctx.service.getPersistentCode(tmpAuthCode)`
-### `this.ctx.service.getSnsToken(persistentCodeOptions)`
-### `this.ctx.service.getUserInfo(snsToken)`
-### `this.ctx.service.getUserByPersistentCode(persistentCode)`
+### `this.ctx.service.ddSns.getToken()`
+### `this.ctx.service.ddSns.getPersistentCode(tmpAuthCode)`
+### `this.ctx.service.ddSns.getSnsToken(persistentCodeOptions)`
+### `this.ctx.service.ddSns.getUserInfo(snsToken)`
+### `this.ctx.service.ddSns.getUserByPersistentCode(persistentCode)`
 
 ## Events Service
 
 * [钉钉官方文档](https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&treeId=172&articleId=104968&docType=1#s0)
 
-### `this.ctx.service.registerEvents(callbackUrl, events, isUpdate = false)`
-### `this.ctx.service.updateEvents(events)`
-### `this.ctx.service.deleteEvents()`
-### `this.ctx.service.queryEvents()`
+### `this.ctx.service.ddEvents.eventsregisterEvents(callbackUrl, events, isUpdate = false)`
+### `this.ctx.service.ddEvents.updateEvents(events)`
+### `this.ctx.service.ddEvents.deleteEvents()`
+### `this.ctx.service.ddEvents.queryEvents()`
 
 ## Process Service
 
 * [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.rgrrdz&treeId=355&articleId=29498&docType=2)
 
-### `this.ctx.service.createProcess(options)`
-### `this.ctx.service.listProcess()`
+### `this.ctx.service.ddProcess.createProcess(options)`
+### `this.ctx.service.ddProcess.listProcess()`
