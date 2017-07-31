@@ -219,54 +219,54 @@
         <ul class="search-results"></ul>
       <div id="toc" class="toc-list-h1">
           <li>
-            <a href="#" class="toc-h1 toc-link" data-title="关于">关于</a>
+            <a href="#about" class="toc-h1 toc-link" data-title="About">About</a>
           </li>
           <li>
-            <a href="#-2" class="toc-h1 toc-link" data-title="配置文件">配置文件</a>
+            <a href="#dd-config" class="toc-h1 toc-link" data-title="DD-CONFIG">DD-CONFIG</a>
           </li>
           <li>
-            <a href="#-3" class="toc-h1 toc-link" data-title="工具类">工具类</a>
+            <a href="#dd-utils" class="toc-h1 toc-link" data-title="DD-utils">DD-utils</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#code-aes-encode-code" class="toc-h2 toc-link" data-title="工具类"><code>aes.encode()</code>参数说明</a>
+                    <a href="#aes-encode" class="toc-h2 toc-link" data-title="DD-utils">aes.encode()</a>
                   </li>
                   <li>
-                    <a href="#code-aes-decode-code" class="toc-h2 toc-link" data-title="工具类"><code>aes.decode()</code>参数说明</a>
+                    <a href="#aes-decode" class="toc-h2 toc-link" data-title="DD-utils">aes.decode()</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#service" class="toc-h1 toc-link" data-title="service">service</a>
+            <a href="#dd-service-api" class="toc-h1 toc-link" data-title="DD-Service API">DD-Service API</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#service-2" class="toc-h2 toc-link" data-title="service">基本service</a>
+                    <a href="#general-service" class="toc-h2 toc-link" data-title="DD-Service API">General Service</a>
                   </li>
                   <li>
-                    <a href="#service-3" class="toc-h2 toc-link" data-title="service">用户相关service</a>
+                    <a href="#user-service" class="toc-h2 toc-link" data-title="DD-Service API">User Service</a>
                   </li>
                   <li>
-                    <a href="#service-4" class="toc-h2 toc-link" data-title="service">部门相关service</a>
+                    <a href="#department-service" class="toc-h2 toc-link" data-title="DD-Service API">Department Service</a>
                   </li>
                   <li>
-                    <a href="#sns-service" class="toc-h2 toc-link" data-title="service">SNS相关service</a>
+                    <a href="#sns-service" class="toc-h2 toc-link" data-title="DD-Service API">SNS Service</a>
                   </li>
                   <li>
-                    <a href="#service-5" class="toc-h2 toc-link" data-title="service">注册事件回调相关service</a>
+                    <a href="#events-service" class="toc-h2 toc-link" data-title="DD-Service API">Events Service</a>
                   </li>
                   <li>
-                    <a href="#service-6" class="toc-h2 toc-link" data-title="service">审批及流程相关service</a>
+                    <a href="#process-service" class="toc-h2 toc-link" data-title="DD-Service API">Process Service</a>
                   </li>
               </ul>
           </li>
       </div>
         <ul class="toc-footer">
-            <li><a href='https://github.com/tripit/slate'> Powered by Slate</a></li>
+            <li><a href='https://github.com/tripit/slate'>Powered by Slate</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id=''>关于</h1>
+        <h1 id='about'>About</h1>
 <p>由于钉钉未提供nodejs sdk，初次用nodejs对应相应接口时比较费时费力，所以将项目中的钉钉对接接口整理出来，以<code>egg插件</code>的方式提供呈现。</p>
 
 <p>本sdk的主要达到三个目的：</p>
@@ -287,13 +287,14 @@
 <li>提供了统一的配置管理</li>
 <li>提供统一的工具调用方式</li>
 <li>提供统一的service调用方式</li>
+<li>统一的日志服务</li>
 </ol></li>
 </ol>
 
 <aside class="notice">
 自己参与的项目非ISV类型，未针对ISV做设计，有需求的同学可以一起参与完善。
 </aside>
-<h1 id='-2'>配置文件</h1>
+<h1 id='dd-config'>DD-CONFIG</h1>
 <blockquote>
 <p>在config/config.default.js中</p>
 </blockquote>
@@ -307,7 +308,11 @@
     <span class="p">},</span>
     <span class="na">aesKey</span><span class="p">:</span> <span class="s2">"1234567890123456789012345678901234567890abc"</span><span class="p">,</span>
     <span class="na">token</span><span class="p">:</span> <span class="s2">"abcdef"</span><span class="p">,</span>
-    <span class="na">nonceStr</span><span class="p">:</span> <span class="s2">"123456"</span>
+    <span class="na">nonceStr</span><span class="p">:</span> <span class="s2">"123456"</span><span class="p">,</span>
+    <span class="na">sso</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">appId</span><span class="p">:</span> <span class="s2">"dingoakznbgimtvtwk49i1"</span><span class="p">,</span>
+      <span class="na">appSecret</span><span class="p">:</span> <span class="s2">"dlDOTzrLsB5XV5aciVsgEu_76KatMgbWgsWJkxsE54fY64D22MIs2ccXkqH6k5gK"</span>
+    <span class="p">}</span>
   <span class="p">};</span>
 </code></pre>
 <blockquote>
@@ -363,8 +368,18 @@
 <td><code>String</code>(6)</td>
 <td>aes加解密及签名时用到, len=6</td>
 </tr>
+<tr>
+<td>sso.appId</td>
+<td><code>String</code></td>
+<td>钉钉扫码登陆的appId</td>
+</tr>
+<tr>
+<td>sso.appSecret</td>
+<td><code>String</code></td>
+<td>钉钉扫码登陆的appSecret</td>
+</tr>
 </tbody></table>
-<h1 id='-3'>工具类</h1>
+<h1 id='dd-utils'>DD-utils</h1>
 <blockquote>
 <p>钉钉通信加解密:</p>
 </blockquote>
@@ -388,7 +403,7 @@
 <aside class="notice">
 进行加解密，必须配置`aesKey`, `token`
 </aside>
-<h2 id='code-aes-encode-code'><code>aes.encode()</code>参数说明</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step2: encode(encodeString, timestamp, nonceString);</span>
+<h2 id='aes-encode'>aes.encode()</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step2: encode(encodeString, timestamp, nonceString);</span>
 <span class="kd">let</span> <span class="nx">encoded</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="s1">'success'</span><span class="p">,</span> <span class="mi">1500957302881</span><span class="p">,</span> <span class="s1">'KOHjp9ss'</span><span class="p">);</span>
 <span class="c1">// console.log(encoded);</span>
 </code></pre>
@@ -397,7 +412,7 @@
 <li>timestamp: 随机时间戳，毫秒时</li>
 <li>nonceString: 随机nonce字符，6位</li>
 </ul>
-<h2 id='code-aes-decode-code'><code>aes.decode()</code>参数说明</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step3: decode(decodeString, timestamp, nonceString, decodeStringSignature)</span>
+<h2 id='aes-decode'>aes.decode()</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step3: decode(decodeString, timestamp, nonceString, decodeStringSignature)</span>
 <span class="kd">let</span> <span class="nx">parsed</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">encoded</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">timeStamp</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">msg_signature</span><span class="p">);</span>
 <span class="c1">// console.log(parsed)</span>
 </code></pre>
@@ -407,11 +422,51 @@
 <li>nonceString: 加密字符串配对的nonceString(钉钉会同加密字符串一起发给你)</li>
 <li>decodeStringSignature: 加密字符串配对的decodeStringSignature(钉钉会同加密字符串一起发给你)</li>
 </ul>
-<h1 id='service'>service</h1>
-<p>大头是service, 对常见的dd api进行了封装</p>
+<h1 id='dd-service-api'>DD-Service API</h1>
+<p>service是SDK的核心, 对常见的 dd api 进行了封装~</p>
 
-<p>文档 TO BE CONTINUE...</p>
-<h2 id='service-2'>基本service</h2><h2 id='service-3'>用户相关service</h2><h2 id='service-4'>部门相关service</h2><h2 id='sns-service'>SNS相关service</h2><h2 id='service-5'>注册事件回调相关service</h2><h2 id='service-6'>审批及流程相关service</h2>
+<aside class="notice">
+关于性能优化：所有service与钉钉通信时都有一个`accessToken`授权认证的过程，为了提高性能需要把`accessToken`缓存下来。
+`egg-dd-sdk`中处理了这部分的性能优化，需要你在egg框架中启用`egg-redis`插件。如果未启用，则不进行accessToken缓存策略。
+</aside>
+<h2 id='general-service'>General Service</h2><h3 id='code-this-ctx-service-dd-gettoken-code'><code>this.ctx.service.dd.getToken()</code></h3><h3 id='code-this-ctx-service-dd-sendmessagebydduserid-dduserid-messageobj-agentidtype-code'><code>this.ctx.service.dd.sendMessageByDdUserId(ddUserId, messageObj, agentIdType)</code></h3>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7386797.0.0.rD6Zgg&amp;treeId=172&amp;articleId=104973&amp;docType=1">钉钉官方文档-企业会话消息接口</a></li>
+<li><a href="https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.HTFncJ&amp;treeId=172&amp;articleId=104972&amp;docType=1">钉钉官方文档-消息类型及数据格式</a></li>
+</ul>
+<h3 id='code-this-ctx-service-dd-getjsapiconfig-originurl-agentidtype-code'><code>this.ctx.service.dd.getJsApiConfig(originUrl, agentIdType)</code></h3>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.qw2yFM&amp;treeId=171&amp;articleId=104910&amp;docType=1">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-dd-getuserinfo-code-code'><code>this.ctx.service.dd.getUserInfo(code)</code></h3>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.p1ESs4&amp;treeId=172&amp;articleId=104969&amp;docType=1">钉钉官方文档</a></li>
+</ul>
+<h2 id='user-service'>User Service</h2>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.6nS7Sz&amp;treeId=172&amp;articleId=104979&amp;docType=1#s6">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-dduser-getuser-userid-code'><code>this.ctx.service.ddUser.getUser(userId)</code></h3><h3 id='code-this-ctx-service-dduser-getusers-departmentid-casade-true-code'><code>this.ctx.service.ddUser.getUsers(departmentId, casade = true)</code></h3>
+<p>钉钉官方api中无法递归获取部门中的员工数据，本接口封装了这部分，当<code>casade=true</code>时，递归后去，默认为true</p>
+<h3 id='code-this-ctx-service-dduser-getusersbydepartment-departmentid-code'><code>this.ctx.service.ddUser.getUsersByDepartment(departmentId)</code></h3>
+<p>钉钉官方api获取部门用户时，会有分页概念，本接口屏蔽了分页逻辑，默认返回返回部门下的所有员工。</p>
+<h3 id='code-this-ctx-service-dduser-createuser-userinfo-code'><code>this.ctx.service.ddUser.createUser(userInfo)</code></h3><h3 id='code-this-ctx-service-dduser-updateuser-userinfo-code'><code>this.ctx.service.ddUser.updateUser(userInfo)</code></h3><h3 id='code-this-ctx-service-dduser-deleteuser-userid-code'><code>this.ctx.service.ddUser.deleteUser(userId)</code></h3><h2 id='department-service'>Department Service</h2>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&amp;treeId=172&amp;articleId=104979&amp;docType=1#s0">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-getdepartment-departmentid-code'><code>this.ctx.service.getDepartment(departmentId)</code></h3><h3 id='code-this-ctx-service-getdepartments-parentid-code'><code>this.ctx.service.getDepartments(parentId)</code></h3><h3 id='code-this-ctx-service-updatedepartment-departmentinfo-code'><code>this.ctx.service.updateDepartment(departmentInfo)</code></h3><h3 id='code-this-ctx-service-deletedepartment-departmentid-code'><code>this.ctx.service.deleteDepartment(departmentId)</code></h3><h2 id='sns-service'>SNS Service</h2>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&amp;treeId=172&amp;articleId=104968&amp;docType=1#s0">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-gettoken-code'><code>this.ctx.service.getToken()</code></h3><h3 id='code-this-ctx-service-getpersistentcode-tmpauthcode-code'><code>this.ctx.service.getPersistentCode(tmpAuthCode)</code></h3><h3 id='code-this-ctx-service-getsnstoken-persistentcodeoptions-code'><code>this.ctx.service.getSnsToken(persistentCodeOptions)</code></h3><h3 id='code-this-ctx-service-getuserinfo-snstoken-code'><code>this.ctx.service.getUserInfo(snsToken)</code></h3><h3 id='code-this-ctx-service-getuserbypersistentcode-persistentcode-code'><code>this.ctx.service.getUserByPersistentCode(persistentCode)</code></h3><h2 id='events-service'>Events Service</h2>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&amp;treeId=172&amp;articleId=104968&amp;docType=1#s0">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-registerevents-callbackurl-events-isupdate-false-code'><code>this.ctx.service.registerEvents(callbackUrl, events, isUpdate = false)</code></h3><h3 id='code-this-ctx-service-updateevents-events-code'><code>this.ctx.service.updateEvents(events)</code></h3><h3 id='code-this-ctx-service-deleteevents-code'><code>this.ctx.service.deleteEvents()</code></h3><h3 id='code-this-ctx-service-queryevents-code'><code>this.ctx.service.queryEvents()</code></h3><h2 id='process-service'>Process Service</h2>
+<ul>
+<li><a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.rgrrdz&amp;treeId=355&amp;articleId=29498&amp;docType=2">钉钉官方文档</a></li>
+</ul>
+<h3 id='code-this-ctx-service-createprocess-options-code'><code>this.ctx.service.createProcess(options)</code></h3><h3 id='code-this-ctx-service-listprocess-code'><code>this.ctx.service.listProcess()</code></h3>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
