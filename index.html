@@ -201,7 +201,7 @@
       <script src="javascripts/all.js"></script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;ruby&quot;,&quot;python&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[&quot;javascript&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -211,9 +211,6 @@
     <div class="toc-wrapper">
       <img src="images/logo.png" class="logo" alt="Logo" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
               <a href="#" data-language-name="javascript">javascript</a>
         </div>
         <div class="search">
@@ -222,279 +219,202 @@
         <ul class="search-results"></ul>
       <div id="toc" class="toc-list-h1">
           <li>
-            <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
+            <a href="#" class="toc-h1 toc-link" data-title="关于">关于</a>
           </li>
           <li>
-            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+            <a href="#-2" class="toc-h1 toc-link" data-title="配置文件">配置文件</a>
           </li>
           <li>
-            <a href="#kittens" class="toc-h1 toc-link" data-title="Kittens">Kittens</a>
+            <a href="#-3" class="toc-h1 toc-link" data-title="工具类">工具类</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-kittens" class="toc-h2 toc-link" data-title="Kittens">Get All Kittens</a>
+                    <a href="#code-aes-encode-code" class="toc-h2 toc-link" data-title="工具类"><code>aes.encode()</code>参数说明</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Kittens">Get a Specific Kitten</a>
-                  </li>
-                  <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Kittens">Delete a Specific Kitten</a>
+                    <a href="#code-aes-decode-code" class="toc-h2 toc-link" data-title="工具类"><code>aes.decode()</code>参数说明</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
+            <a href="#service" class="toc-h1 toc-link" data-title="service">service</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#service-2" class="toc-h2 toc-link" data-title="service">基本service</a>
+                  </li>
+                  <li>
+                    <a href="#service-3" class="toc-h2 toc-link" data-title="service">用户相关service</a>
+                  </li>
+                  <li>
+                    <a href="#service-4" class="toc-h2 toc-link" data-title="service">部门相关service</a>
+                  </li>
+                  <li>
+                    <a href="#sns-service" class="toc-h2 toc-link" data-title="service">SNS相关service</a>
+                  </li>
+                  <li>
+                    <a href="#service-5" class="toc-h2 toc-link" data-title="service">注册事件回调相关service</a>
+                  </li>
+                  <li>
+                    <a href="#service-6" class="toc-h2 toc-link" data-title="service">审批及流程相关service</a>
+                  </li>
+              </ul>
           </li>
       </div>
         <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='https://github.com/tripit/slate'> Powered by Slate</a></li>
         </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='introduction'>Introduction</h1>
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+        <h1 id=''>关于</h1>
+<p>由于钉钉未提供nodejs sdk，初次用nodejs对应相应接口时比较费时费力，所以将项目中的钉钉对接接口整理出来，以<code>egg插件</code>的方式提供呈现。</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>本sdk的主要达到三个目的：</p>
 
-<p>This example API documentation page was created with <a href="https://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&#39;s documentation.</p>
-<h1 id='authentication'>Authentication</h1>
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+<ol>
+<li>config: 钉钉相关配置的约定</li>
+<li>utils: 将钉钉加解密之类的复杂方法抽象为工具类</li>
+<li>service: 将与钉钉相关的API接口进行封装，以service方式提供，方便调用</li>
+</ol>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<p>另外，关于为什么基于<code>egg插件</code>，说明一下原因：</p>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
+<ol>
+<li><code>egg</code>框架本身在企业级应用框架中的分层非常清晰，扩展机制极其灵活，配套完整，极力推荐</li>
+<li>通过<code>egg插件</code>的组织，能够非常方便的组织钉钉的配置文件管理、工具使用及service使用
 
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-</code></pre>
-<blockquote>
-<p>Make sure to replace <code>meowmeowmeow</code> with your API key.</p>
-</blockquote>
-
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code>Authorization: meowmeowmeow</code></p>
+<ol>
+<li>提供了统一的配置管理</li>
+<li>提供统一的工具调用方式</li>
+<li>提供统一的service调用方式</li>
+</ol></li>
+</ol>
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+自己参与的项目非ISV类型，未针对ISV做设计，有需求的同学可以一起参与完善。
 </aside>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">kittens</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<h1 id='-2'>配置文件</h1>
+<blockquote>
+<p>在config/config.default.js中</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code>  <span class="nx">exports</span><span class="p">.</span><span class="nx">DD_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">corpId</span><span class="p">:</span> <span class="s2">"dinge0e69ed313daa460"</span><span class="p">,</span>
+    <span class="na">secret</span><span class="p">:</span> <span class="s2">"sH_JdRrkgRvmJ5B9_RPjAM51hgT9cXhxCl0-_kUDY5_VOuhPX_PbIoKsigoyEqLd"</span><span class="p">,</span>
+    <span class="na">agentId</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s1">'default'</span><span class="p">:</span> <span class="s1">'103015601'</span><span class="p">,</span>
+      <span class="s1">'applyAndApprove'</span><span class="p">:</span> <span class="s1">'84637933'</span><span class="p">,</span>
+      <span class="s1">'sso'</span><span class="p">:</span> <span class="s1">'103015601'</span>
+    <span class="p">},</span>
+    <span class="na">aesKey</span><span class="p">:</span> <span class="s2">"1234567890123456789012345678901234567890abc"</span><span class="p">,</span>
+    <span class="na">token</span><span class="p">:</span> <span class="s2">"abcdef"</span><span class="p">,</span>
+    <span class="na">nonceStr</span><span class="p">:</span> <span class="s2">"123456"</span>
+  <span class="p">};</span>
 </code></pre>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>注意<code>DD_CONFIG</code>关键词</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves all kittens.</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET http://example.com/api/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+
+<p>钉钉通信中会涉及安全认证、加解密、签名验证等诸多操作，所以有各类key,token等用于上述过程：</p>
+
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
+<th>字段你</th>
+<th>格式</th>
+<th>说明</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td>coprId</td>
+<td><code>String</code></td>
+<td>公司唯一标识</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td>secret</td>
+<td><code>String</code></td>
+<td>认证密钥，非常重要，妥善保管，具有极高权限</td>
+</tr>
+<tr>
+<td>agentId</td>
+<td><code>Sring</code> or <code>Object</code></td>
+<td>微应用的ID</td>
+</tr>
+<tr>
+<td>agentId(String)</td>
+<td><code>String</code></td>
+<td>当只有一个微应用时</td>
+</tr>
+<tr>
+<td>agentId(Object)</td>
+<td>{key, value} = <code>Object</code></td>
+<td>其中 key 为 <code>agentIdType</code>, value为对应值</td>
+</tr>
+<tr>
+<td>aesKey</td>
+<td><code>String</code>(43)</td>
+<td>AES加解密时需要的一个secretKey，长度43位，自己定义</td>
+</tr>
+<tr>
+<td>token</td>
+<td><code>String</code>(6)</td>
+<td>aes加解密及签名时用到, len=6</td>
+</tr>
+<tr>
+<td>nonceStr</td>
+<td><code>String</code>(6)</td>
+<td>aes加解密及签名时用到, len=6</td>
 </tr>
 </tbody></table>
+<h1 id='-3'>工具类</h1>
+<blockquote>
+<p>钉钉通信加解密:</p>
+</blockquote>
+<pre class="highlight javascript tab-javascript"><code><span class="c1">// step1: createInstance</span>
+<span class="kd">let</span> <span class="nx">aes</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">helper</span><span class="p">.</span><span class="nx">createDdEncrpt</span><span class="p">();</span>
+<span class="c1">// step2: encode(encodeString, timestamp, nonceString);</span>
+<span class="kd">let</span> <span class="nx">encoded</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="s1">'success'</span><span class="p">,</span> <span class="mi">1500957302881</span><span class="p">,</span> <span class="s1">'KOHjp9ss'</span><span class="p">);</span>
+<span class="c1">// console.log(encoded);</span>
+<span class="c1">// step3: decode(decodeString, timestamp, nonceString, decodeStringSignature)</span>
+<span class="kd">let</span> <span class="nx">parsed</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">encoded</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">timeStamp</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">msg_signature</span><span class="p">);</span>
+<span class="c1">// console.log(parsed)</span>
+</code></pre>
+<p>使用钉钉的部分接口，需要进行<code>加解密</code>以及<code>签名验证</code>操作，签名相对简单，但加解密涉及大量编码转换以及算法知识，在缺乏相关知识背景的情况下，很难完成。官方仅提供了PHP,JAVA SDK，自己摸索了半天才搞定了Nodejs版的部分。</p>
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+<p>我们提供了: <code>this.helper.createDdEncrpt()</code>方法</p>
+
+<p>官方文档：<a href="https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.8b5CcM&amp;treeId=366&amp;articleId=104945&amp;docType=1#s13">钉钉加解密及签名验证</a></p>
+
+<p>另外提供了非egg版本，参见：<a href="https://github.com/cathayjs/nodejs-dd-aes">nodejs-dd-aes</a></p>
+
+<aside class="notice">
+进行加解密，必须配置`aesKey`, `token`
 </aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<h2 id='code-aes-encode-code'><code>aes.encode()</code>参数说明</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step2: encode(encodeString, timestamp, nonceString);</span>
+<span class="kd">let</span> <span class="nx">encoded</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">encode</span><span class="p">(</span><span class="s1">'success'</span><span class="p">,</span> <span class="mi">1500957302881</span><span class="p">,</span> <span class="s1">'KOHjp9ss'</span><span class="p">);</span>
+<span class="c1">// console.log(encoded);</span>
 </code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -X DELETE
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre><pre class="highlight javascript tab-javascript"><code><span class="kr">const</span> <span class="nx">kittn</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'kittn'</span><span class="p">);</span>
-
-<span class="kd">let</span> <span class="nx">api</span> <span class="o">=</span> <span class="nx">kittn</span><span class="p">.</span><span class="nx">authorize</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">);</span>
-<span class="kd">let</span> <span class="nx">max</span> <span class="o">=</span> <span class="nx">api</span><span class="p">.</span><span class="nx">kittens</span><span class="p">.</span><span class="k">delete</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<ul>
+<li>encodeString: 要加密的原始字符串（你要发给钉钉的原始字符串）</li>
+<li>timestamp: 随机时间戳，毫秒时</li>
+<li>nonceString: 随机nonce字符，6位</li>
+</ul>
+<h2 id='code-aes-decode-code'><code>aes.decode()</code>参数说明</h2><pre class="highlight javascript tab-javascript"><code><span class="c1">// step3: decode(decodeString, timestamp, nonceString, decodeStringSignature)</span>
+<span class="kd">let</span> <span class="nx">parsed</span> <span class="o">=</span> <span class="nx">aes</span><span class="p">.</span><span class="nx">decode</span><span class="p">(</span><span class="nx">encoded</span><span class="p">.</span><span class="nx">encrypt</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">timeStamp</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">nonce</span><span class="p">,</span> <span class="nx">encoded</span><span class="p">.</span><span class="nx">msg_signature</span><span class="p">);</span>
+<span class="c1">// console.log(parsed)</span>
 </code></pre>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"deleted"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-<p>This endpoint retrieves a specific kitten.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
-</tr>
-</tbody></table>
-<h1 id='errors'>Errors</h1>
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files...just save them to the `includes` folder and add them to the top of your `index.md`'s frontmatter. Files are included in the order listed.</aside>
+<ul>
+<li>decodeString：解密钉钉发给你的加密字符串</li>
+<li>timestamp: 加密字符串配对的timestamp(钉钉会同加密字符串一起发给你)</li>
+<li>nonceString: 加密字符串配对的nonceString(钉钉会同加密字符串一起发给你)</li>
+<li>decodeStringSignature: 加密字符串配对的decodeStringSignature(钉钉会同加密字符串一起发给你)</li>
+</ul>
+<h1 id='service'>service</h1>
+<p>大头是service, 对常见的dd api进行了封装</p>
 
-<p>The Kittn API uses the following error codes:</p>
-
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>400</td>
-<td>Bad Request -- Your request sucks.</td>
-</tr>
-<tr>
-<td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
-</tr>
-<tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error -- We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
-</tr>
-</tbody></table>
-
+<p>文档 TO BE CONTINUE...</p>
+<h2 id='service-2'>基本service</h2><h2 id='service-3'>用户相关service</h2><h2 id='service-4'>部门相关service</h2><h2 id='sns-service'>SNS相关service</h2><h2 id='service-5'>注册事件回调相关service</h2><h2 id='service-6'>审批及流程相关service</h2>
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
                 <a href="#" data-language-name="javascript">javascript</a>
           </div>
       </div>
