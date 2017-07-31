@@ -6,6 +6,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
 
 toc_footers:
   - <a href='https://github.com/tripit/slate'>Powered by Slate</a>
+  - <a href='https://github.com/cathayjs/egg-dd-sdk'>返回GITHUB</a>
 
 includes:
 
