@@ -8,6 +8,10 @@ module.exports.DD_CONFIG = {
     agentId: {
         'default': '116146340'
     },
-    nonceStr: "123456"
+    nonceStr: "123456",
+    sso: {
+        appId: 'dingoakznbgimtvtwk49kk',
+        appSecret: 'dlDOTzrLsB5XV5aciVsgEu_76KatMgbWgsWJkxsE54fY64D22MIs2ccXkqH6k5gK'
+    }
 };
 

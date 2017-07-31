@@ -2,12 +2,13 @@
 
 module.exports = app => {
 
+    const DD_CONFIG = app.config.DD_CONFIG;
+    const { appId, appSecret } = DD_CONFIG.sso || {};
+
     /***
-     * 扫码appId , appSecret生成地址：http://open-dev.dingtalk.com/#/loginAndShareApp?_k=ert0n1
+     * 扫码appId , appSecret生成地址：http://open-dev.dingtalk.com/#/loginAndShareApp
      * @type {string}
      */
-    const appId = 'dingoakznbgimtvtwk49ki';
-    const appSecret = 'dlDOTzrLsB5XV5aciVsgEu_76KatMgbWgsWJkxsE54fY64D22MIs2ccXkqH6k5gL';
 
     class DdSns extends app.Service {
         constructor(ctx) {

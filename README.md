@@ -19,10 +19,9 @@
   1. 提供了统一的配置管理
   2. 提供统一的工具调用方式
   3. 提供统一的service调用方式
+  4. 提供统一的日志服务
 
 
-<aside class="notice">
-自己参与的项目非ISV类型，未针对ISV做设计，有需求的同学可以一起参与完善。
-</aside>
-
+> 自己参与的项目非ISV类型，未针对ISV做设计，有需求的同学可以一起参与完善。
+> 
 > API文档请参见：https://cathayjs.github.io/egg-dd-sdk/
