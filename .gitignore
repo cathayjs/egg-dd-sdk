@@ -1,5 +1,6 @@
 node_modules/
 logs/
 run/
+build/
 .idea/
 .vs/
