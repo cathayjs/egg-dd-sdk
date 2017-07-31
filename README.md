@@ -25,3 +25,13 @@
 > 自己参与的项目非ISV类型，未针对ISV做设计，有需求的同学可以一起参与完善。
 > 
 > API文档请参见：https://cathayjs.github.io/egg-dd-sdk/
+
+
+## 关于单测
+
+`egg-dd-sdk`虽然是egg插件，但有完善的单测机制，且与egg框架目录结构使用方式一致：
+
+* cnpm install
+* npm run dev
+
+目前以公共19个用例，覆盖了大部分接口
