@@ -216,3 +216,19 @@ service是SDK的核心, 对常见的 dd api 进行了封装~
 
 ### `this.ctx.service.ddProcess.createProcess(options)`
 ### `this.ctx.service.ddProcess.listProcess()`
+
+
+## Media Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.vIRFEl&treeId=385&articleId=104971&docType=1)
+
+### `this.ctx.service.ddMedia.upload(filePath)`
+### `this.ctx.service.ddMedia.get(mediaId)`
+
+
+## Space Service
+
+* [钉钉官方文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.Wr6ob3&treeId=385&articleId=104970&docType=1)
+
+### `this.ctx.service.ddSpace.upload(filePath)`
+### `this.ctx.service.ddSpace.send(mediaId, userId, fileName)`

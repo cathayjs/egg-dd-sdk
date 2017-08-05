@@ -22,3 +22,8 @@ build/
 _yardoc
 doc/
 .idea/
+
+
+run/
+node_modules/
+logs/
