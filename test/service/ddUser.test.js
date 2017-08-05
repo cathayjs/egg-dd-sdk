@@ -45,7 +45,7 @@ describe('service/DdUser.js', () => {
 
   it('getUsers()', function* () {
     let result = yield ctx.service.ddUser.getUsers();
-    assert(result.length === 2 && result[0].name);
+    assert(result.length > 2 && result[0].name);
   });
 
 

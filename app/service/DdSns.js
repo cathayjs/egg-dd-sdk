@@ -30,7 +30,8 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: getToken error:`, JSON.stringify(resultData));
+                app.logger.error(`DdSns: getToken error:`, resultData);
+                throw new Error(JSON.stringify(resultData));
             }
 
             app.logger.info(`DdSns: end getToken to Dingding`);

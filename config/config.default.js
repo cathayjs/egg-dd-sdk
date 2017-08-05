@@ -10,8 +10,8 @@ module.exports.DD_CONFIG = {
     },
     nonceStr: "123456",
     sso: {
-        appId: 'dingoakznbgimtvtwk49kk',
-        appSecret: 'dlDOTzrLsB5XV5aciVsgEu_76KatMgbWgsWJkxsE54fY64D22MIs2ccXkqH6k5gK'
+        appId: 'dingoa9l870sdqembng3je',
+        appSecret: 'h0Y1uH4w4nkToIvzJzd6VKRNbJsqevOi791B0eeOVM87GrumW4xLEGOQqjzmo9eK'
     }
 };
 
