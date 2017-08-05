@@ -15,17 +15,17 @@ module.exports = app => {
             super(ctx);
         }
 
-        * upload() {
+        * upload(filePath = __filename) {
 
             let token = yield this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             const form = new FormStream();
 
-            let stateResult = fs.statSync(__filename);
+            let stateResult = fs.statSync(filePath);
             let filesize = stateResult.size;
 
-            form.file('media', __filename);
+            form.file('media', filePath);
 
             app.logger.info(`DdSpace: before upload media to space Dingding`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/file/upload/single?access_token=${token}&agent_id=${agentId}&file_size=${filesize}`, {
@@ -39,6 +39,7 @@ module.exports = app => {
 
             if (resultData.errcode) {
                 app.logger.error(`DdSpace:  upload media to space error: `, resultData);
+                throw new Error(JSON.stringify(resultData));
             }
             app.logger.info(`DdSpace: end  upload media to space to Dingding`);
 
