@@ -17,11 +17,7 @@ module.exports = app => {
 
             let token = yield this.ctx.service.dd.getToken();
 
-            if (options.employeeId) {
-                let employee = yield this.ctx.service.employee.getEmployeeById(options.employeeId);
-                options.originator_user_id = employee.ddUserId;
-                options.deprt_id = employee.ddDepartmentId;
-            }
+
 
             let finalData = Object.assign({
                 method: 'dingtalk.smartwork.bpms.processinstance.create',
@@ -37,6 +33,8 @@ module.exports = app => {
                     approvers: options.approvers,
                     form_component_values: JSON.stringify(options.form_component_values)
                 });
+
+            this.app.logger.info('[DdProcess:createProcess] before createProcess, info:', finalData);
 
             // 不需要设置 contentType，HttpClient 会默认以 application/x-www-form-urlencoded 格式发送请求
             let result = yield this.app.curl('https://eco.taobao.com/router/rest', {
@@ -54,6 +52,8 @@ module.exports = app => {
             if (resultData.ding_open_errcode || !resultData.is_success) {
                 throw new Error(JSON.stringify(resultData));
             }
+
+            this.app.logger.info('[DdProcess:createProcess] end createProcess');
 
             return resultData.process_instance_id;
         }
