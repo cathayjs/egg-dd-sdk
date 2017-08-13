@@ -20,7 +20,7 @@ module.exports = app => {
 
             // events = ["user_add_org", "user_modify_org", "user_leave_org", "org_admin_add", "org_admin_remove", "org_dept_create", "org_dept_modify", "org_dept_remove", "org_remove", "label_user_change", "label_conf_add", "label_conf_modify", "label_conf_del", "org_change", "chat_add_member", "chat_remove_member", "chat_quit", "chat_update_owner", "chat_update_title", "chat_disband", "chat_disband_microapp", "check_in", "bpms_task_change", "bpms_instance_change"];
 
-            this.app.logger.info('[ddUser] before registerEvent, isUpdate ', isUpdate);
+            this.app.logger.info('[service:ddEvents:registerEvents] start, isUpdate ', isUpdate);
 
             let token = yield this.ctx.service.dd.getToken();
 
@@ -44,10 +44,10 @@ module.exports = app => {
 
             /* istanbul ignore if */
             if (resultData.errcode) {
-                this.app.logger.error('[ddUser] registerEvent error:', resultData)
+                this.app.logger.error('[service:ddEvents:registerEvents] error:', resultData)
             }
 
-            this.app.logger.info('[ddUser] after registerEvent:');
+            this.app.logger.info('[service:ddEvents:registerEvents] end');
 
             return !resultData.errcode;
         }
@@ -59,7 +59,7 @@ module.exports = app => {
 
         * deleteEvents() {
 
-            this.app.logger.info('[ddUser] before deleteEvents:');
+            this.app.logger.info('[service:ddEvents:deleteEvents] start');
 
             let token = yield this.ctx.service.dd.getToken();
 
@@ -71,11 +71,11 @@ module.exports = app => {
 
             /* istanbul ignore if */
             if (resultData.errcode) {
-                this.app.logger.error('[ddUser] deleteEvents error:', resultData);
+                this.app.logger.error('[service:ddEvents:deleteEvents] error:', resultData);
                 throw new Error(JSON.stringify(resultData, null, 4));
             }
 
-            this.app.logger.info('[ddUser] after deleteEvents:');
+            this.app.logger.info('[service:ddEvents:deleteEvents] end');
 
             return !resultData.errcode;
         }
@@ -83,7 +83,7 @@ module.exports = app => {
 
         * queryEvents() {
 
-            this.app.logger.info('[ddUser] before queryEvents:');
+            this.app.logger.info('[service:ddEvents:queryEvents] start');
 
             let token = yield this.ctx.service.dd.getToken();
 
@@ -95,11 +95,11 @@ module.exports = app => {
 
             /* istanbul ignore if */
             if (resultData.errcode) {
-                this.app.logger.error('[ddUser] queryEvents error:', resultData);
+                this.app.logger.error('[service:ddEvents:queryEvents] error:', resultData);
                 throw new Error(JSON.stringify(resultData, null, 4));
             }
 
-            this.app.logger.info('[ddUser] after queryEvents:');
+            this.app.logger.info('[service:ddEvents:queryEvents] end');
 
             return resultData;
         }

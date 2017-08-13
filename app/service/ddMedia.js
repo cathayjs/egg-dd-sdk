@@ -23,7 +23,7 @@ module.exports = app => {
             const form = new FormStream();
             form.file('media', filePath);
 
-            app.logger.info(`DdSns: before upload media to Dingding`);
+            app.logger.info(`[service:ddMedia:upload] start`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/media/upload?access_token=${token}&type=file`, {
                 dataType: 'json',
                 headers: form.headers(),
@@ -34,10 +34,10 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: upload media error:`, resultData);
+                app.logger.error(`[service:ddMedia:upload] error:`, resultData);
                 throw new Error(resultData);
             }
-            app.logger.info(`DdSns: end upload media to Dingding`);
+            app.logger.info(`[service:ddMedia:upload] end`);
 
             return resultData.media_id;
         }
@@ -46,7 +46,7 @@ module.exports = app => {
         * get(mediaId) {
             let token = yield this.ctx.service.dd.getToken();
 
-            app.logger.info(`DdMedia: before get media from Dingding`);
+            app.logger.info(`[service:ddMedia:get] start, mediaId: ${mediaId}`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/media/downloadFile?access_token=${token}&media_id=${mediaId}`, {
                 method: 'GET'
             });
@@ -54,9 +54,9 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdMedia: get media error:`, resultData);
+                app.logger.error(`[service:ddMedia:get] error:`, resultData);
             }
-            app.logger.info(`DdMedia: end get media from Dingding`);
+            app.logger.info(`[service:ddMedia:get] end`);
 
             return resultData;
         }

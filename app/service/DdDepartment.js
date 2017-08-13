@@ -11,6 +11,8 @@ module.exports = app => {
         // TODO 貌似没有被调用, 是否需要删除
         * getDepartment(departmentId) {
 
+            this.app.logger.info(`[service:ddDepartment:getDepartment] start, departmentId: ${departmentId}`);
+
             let token = yield this.ctx.service.dd.getToken();
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/get?access_token=${token}&id=${departmentId}`, {
                 dataType: 'json',
@@ -19,8 +21,10 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:getDepartment] error: `, resultData);
                 throw new Error(JSON.stringify(resultData));
             }
+            this.app.logger.info(`[service:ddDepartment:getDepartment] end`);
 
             return resultData;
         }
@@ -28,21 +32,34 @@ module.exports = app => {
 
         * getDepartments(parentId = '') {
 
+            this.app.logger.info(`[service:ddDepartment:getDepartments] start, parentId: ${parentId}`);
+
             let token = yield this.ctx.service.dd.getToken();
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/list?access_token=${token}&id=${parentId}`, {
                 dataType: 'json',
                 method: 'GET'
             });
 
-            result = result.data || {};
+            let resultData = result.data || {};
 
-            return result.department;
+            if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:getDepartments] error: `, resultData);
+                throw new Error(JSON.stringify(resultData));
+            }
+
+            let departments = resultData.department;
+
+            this.app.logger.info(`[service:ddDepartment:getDepartments] end`);
+
+            return departments;
 
         }
 
 
         // TODO 未被使用
         * createDepartment(departmentInfo) {
+
+            this.app.logger.info(`[service:ddDepartment:createDepartment] start, departmentInfo: `, departmentInfo);
 
             let token = yield this.ctx.service.dd.getToken();
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/create?access_token=${token}`, {
@@ -55,8 +72,11 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:createDepartment] error: `, resultData);
                 throw new Error(JSON.stringify(resultData));
             }
+
+            this.app.logger.info(`[service:ddDepartment:createDepartment] end`);
 
             return resultData;
         }
@@ -67,6 +87,8 @@ module.exports = app => {
          * @param departmentInfo
          */
         * updateDepartment(departmentInfo) {
+
+            this.app.logger.info(`[service:ddDepartment:updateDepartment] start, updateDepartment: `, updateDepartment);
 
             let token = yield this.ctx.service.dd.getToken();
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/update?access_token=${token}`, {
@@ -79,8 +101,11 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:updateDepartment] error: `, resultData);
                 throw new Error(JSON.stringify(resultData));
             }
+
+            this.app.logger.info(`[service:ddDepartment:updateDepartment] end `);
 
             return resultData;
         }
@@ -88,6 +113,8 @@ module.exports = app => {
         // TODO 未被使用
         * deleteDepartment(departmentId) {
             let token = yield this.ctx.service.dd.getToken();
+
+            this.app.logger.info(`[service:ddDepartment:deleteDepartment] start, departmentId: `, departmentId);
 
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/delete?access_token=${token}&id=${departmentId}`, {
                 dataType: 'json',
@@ -97,8 +124,10 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:deleteDepartment] error: `, resultData);
                 throw new Error(resultData);
             }
+            this.app.logger.info(`[service:ddDepartment:deleteDepartment] end`);
 
             return resultData;
         }

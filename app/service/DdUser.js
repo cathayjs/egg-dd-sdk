@@ -14,7 +14,7 @@ module.exports = app => {
      */
     * getUser(userId) {
 
-      this.app.logger.info('[ddUser] before getUser:', userId);
+      this.app.logger.info('[service:ddUser:getUser] start, userId:', userId);
 
       let token = yield this.ctx.service.dd.getToken();
       let result = yield this.app.curl(`https://oapi.dingtalk.com/user/get?access_token=${token}&userid=${userId}`, {
@@ -25,10 +25,10 @@ module.exports = app => {
 
       /* istanbul ignore if */
       if (resultData.errcode) {
-        this.app.logger.error('[ddUser] getUser error:', resultData)
+        this.app.logger.error('[service:ddUser:getUser] getUser error:', resultData)
       }
 
-      this.app.logger.info('[ddUser] after getUser:', userId);
+      this.app.logger.info('[service:ddUser:getUser] end');
 
       return resultData;
     }
@@ -36,10 +36,8 @@ module.exports = app => {
     * getUsers(departmentId = "", casade = true) {
 
       try {
-
         let ddUsers = [];
-
-        this.app.logger.info('[ddUser] before getUsers, departmentId, casade:', departmentId, casade);
+        this.app.logger.info(`[service:ddUser:getUsers] before getUsers, departmentId: ${departmentId}, casade: ${casade}`);
 
         if (!casade) {
           ddUsers = yield this.getUsersByDepartment(departmentId);
@@ -58,19 +56,17 @@ module.exports = app => {
             let subUsers = yield this.getUsersByDepartment(departmentId);
             ddUsers = ddUsers.concat(subUsers);
           }
-
         }
-
-        this.app.logger.info('[ddUser] after getUsers, departmentId, casade:', departmentId, casade);
 
         ddUsers = ddUtils.deleteRepeated(ddUsers);
 
+        this.app.logger.info('[service:ddUser:getUsers] end, ddUsers.length:', ddUsers.length);
 
         return ddUsers;
 
       } catch (e) {
 
-        this.ctx.app.logger.error('[DD API] get Users Error', e);
+        this.ctx.app.logger.error('[service:ddUser:getUsers] error: ', e);
 
         throw e;
       }
@@ -79,7 +75,7 @@ module.exports = app => {
 
     * getUsersByDepartment(departmentId, offset = 0, size = 100) {
 
-      this.app.logger.info('[ddUser] before getUsersByDepartment, departmentId, offset:', departmentId, offset);
+      this.app.logger.info(`[service:ddUser:getUsersByDepartment] start, departmentId: ${departmentId}, offset: ${offset}`);
 
       let token = yield this.ctx.service.dd.getToken();
       let result = yield this.app.curl(`https://oapi.dingtalk.com/user/list?offset=${offset}&size=${size}&access_token=${token}&department_id=${departmentId}`, {
@@ -91,19 +87,17 @@ module.exports = app => {
 
       /* istanbul ignore if */
       if (resultData.errcode) {
-        this.ctx.app.logger.error('[ddUser] getUsersByDepartment', departmentId, offset, size);
-        throw new Error(`getUsersByDepartment error ${departmentId}`);
+        this.ctx.app.logger.error('[service:ddUser:getUsersByDepartment] getUsersByDepartment', resultData);
       }
 
       let users = resultData.userlist || [];
 
       if (resultData.hasMore) {
         let more = yield this.getUsersByDepartment(departmentId, offset + size, size);
-
         users = users.concat(more);
       }
 
-      this.app.logger.info('[ddUser] after getUsersByDepartment, departmentId, offset:', departmentId, offset);
+      this.app.logger.info('[service:ddUser:getUsersByDepartment] end');
 
       return users;
     }
@@ -116,32 +110,26 @@ module.exports = app => {
      */
     * createUser(userInfo) {
 
-      try {
-        this.app.logger.info('[ddUser] before createUser:', userInfo);
+      this.app.logger.info('[service:ddUser:createUser] start:', userInfo);
 
-        let token = yield this.ctx.service.dd.getToken();
-        let result = yield this.app.curl(`https://oapi.dingtalk.com/user/create?access_token=${token}`, {
-          dataType: 'json',
-          contentType: 'json',
-          method: 'POST',
-          data: userInfo
-        });
+      let token = yield this.ctx.service.dd.getToken();
+      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/create?access_token=${token}`, {
+        dataType: 'json',
+        contentType: 'json',
+        method: 'POST',
+        data: userInfo
+      });
 
-        let resultData = result.data;
+      let resultData = result.data;
 
-        /* istanbul ignore if */
-        if (resultData.errcode) {
-          this.ctx.app.logger.error('[ddUser] createUser', userInfo, resultData);
-          throw new Error(`create dd user error ${userInfo.jobnumber}`);
-        }
-
-        this.app.logger.info('[ddUser] after createUser:');
-
-        return resultData;
-      } catch (e) {
-  
-        throw e;
+      /* istanbul ignore if */
+      if (resultData.errcode) {
+        this.ctx.app.logger.error('[service:ddUser:createUser] createUser', resultData);
       }
+
+      this.app.logger.info('[service:ddUser:createUser] end');
+
+      return resultData;
 
     }
 
@@ -152,33 +140,25 @@ module.exports = app => {
      */
     * updateUser(userInfo) {
 
-      try {
-        this.app.logger.info('[ddUser] before updateUser:', userInfo);
+      this.app.logger.info('[service:ddUser:updateUser] start:', userInfo);
 
-        let token = yield this.ctx.service.dd.getToken();
-        let result = yield this.app.curl(`https://oapi.dingtalk.com/user/update?access_token=${token}`, {
-          dataType: 'json',
-          contentType: 'json',
-          method: 'POST',
-          data: userInfo
-        });
-        let resultData = result.data;
+      let token = yield this.ctx.service.dd.getToken();
+      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/update?access_token=${token}`, {
+        dataType: 'json',
+        contentType: 'json',
+        method: 'POST',
+        data: userInfo
+      });
+      let resultData = result.data;
 
-        /* istanbul ignore if */
-        if (resultData.errcode) {
-          this.app.logger.error('[ddUser] updateDdUser', resultData);
-          throw new Error(`updateDdUser error ${userInfo.jobnumber}`);
-        }
-
-        this.app.logger.info('[ddUser] after updateUser');
-
-        return resultData;
-
-      } catch (e) {
- 
-        throw e;
+      /* istanbul ignore if */
+      if (resultData.errcode) {
+        this.app.logger.error('[service:ddUser:updateUser] error:', resultData);
       }
 
+      this.app.logger.info('[service:ddUser:updateUser] end');
+
+      return resultData;
     }
 
     /************
@@ -190,36 +170,29 @@ module.exports = app => {
      */
     * deleteUser(userId, times = 1) {
 
-      try {
-        this.app.logger.info('[ddUser] before deleteUser:', userId);
+      this.app.logger.info('[service:ddUser:deleteUser] start, userId:', userId);
 
-        let token = yield this.ctx.service.dd.getToken();
-        let result = yield this.app.curl(`https://oapi.dingtalk.com/user/delete?access_token=${token}&userid=${userId}`, {
-          dataType: 'json',
-          method: 'GET'
-        });
-        let resultData = result.data;
+      let token = yield this.ctx.service.dd.getToken();
+      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/delete?access_token=${token}&userid=${userId}`, {
+        dataType: 'json',
+        method: 'GET'
+      });
+      let resultData = result.data;
 
-        /* istanbul ignore if */
-        if (resultData.errcode) {
-          this.ctx.app.logger.error('[ddUser] delete ddUserError', resultData, times);
-          if (times < 3) {
-            times++;
-            this.deleteUser(userId, times);
-          } else {
-            throw new Error(`delete dd user error ${userId}, tried 3 times`);
-          }
+      /* istanbul ignore if */
+      if (resultData.errcode) {
+        this.ctx.app.logger.error('[service:ddUser:deleteUser] error:', resultData, times);
+        if (times < 3) {
+          times++;
+          yield this.deleteUser(userId, times);
+        } else {
+          throw new Error(`[service:ddUser:deleteUser] delete dd user error ${userId}, tried 3 times`);
         }
-
-        this.app.logger.info('[ddUser] after deleteUser:', userId);
-
-        return resultData;
-
-      } catch (e) {
-    
-        throw e;
       }
 
+      this.app.logger.info('[service:ddUser:deleteUser] end');
+
+      return resultData;
     }
   }
 

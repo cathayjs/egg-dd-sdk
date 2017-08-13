@@ -43,7 +43,7 @@ module.exports = app => {
 
       // 更新corpAccessToken
       if (!accessToken) {
-        app.logger.info(`Dd: before getToken to Dingding`);
+        app.logger.info(`[service:dd:getToken] start`);
 
         let result = yield this.app.curl(`https://oapi.dingtalk.com/gettoken?corpid=${ddConfig.corpId}&corpsecret=${ddConfig.secret}`, {
           dataType: 'json'
@@ -52,10 +52,10 @@ module.exports = app => {
 
         /* istanbul ignore if */
         if (resultData.errcode) {
-          app.logger.error(`Dd: getToken error: `, resultData);
+          app.logger.error(`[service:dd:getToken] error: `, resultData);
         }
 
-        app.logger.info(`Dd: end getToken to Dingding`);
+        app.logger.info(`[service:dd:getToken] end`);
 
         accessToken = resultData.access_token;
 
@@ -84,7 +84,7 @@ module.exports = app => {
 
       let token = yield this.getToken();
 
-      app.logger.info(`before sendMessage to Dingding, ddUserId:${ddUserId}`);
+      app.logger.info(`[service:dd:sendMessageByDdUserId] start, ddUserId:`, ddUserId);
 
       const result = yield this.app.curl(`https://oapi.dingtalk.com/message/send?access_token=${token}`, {
         method: 'POST',
@@ -100,10 +100,10 @@ module.exports = app => {
 
       /* istanbul ignore if */
       if (resultData.errcode) {
-        app.logger.error(`sendMessage to Dingding error: ${JSON.stringify()}`);
+        app.logger.error(`[service:dd:sendMessageByDdUserId] error: `, resultData);
       }
 
-      app.logger.info(`end sendMessage to Dingding`);
+      app.logger.info(`[service:dd:sendMessageByDdUserId] end`);
 
       return !resultData.errcode;
     }
@@ -118,9 +118,11 @@ module.exports = app => {
      */
     * getJsApiConfig(originUrl, agentIdType) {
 
-      assert(originUrl, '[Service Dd] getJsApiConfig originUrl is required');
+      assert(originUrl, '[service:dd:getJsApiConfig] getJsApiConfig originUrl is required');
 
-      app.logger.info(`[Service Dd] getJsApiConfig:getJsApiTicket START `, originUrl, agentIdType);
+      let agentId = this._getAgentId(agentIdType);
+
+      app.logger.info(`[service:dd:getJsApiConfig] start: `, originUrl, agentId);
 
       const REDIS_KEY = 'EMP_jsApiConfig' + md5(originUrl);
 
@@ -140,12 +142,12 @@ module.exports = app => {
 
         /* istanbul ignore if */
         if (ticketResultData.errcode) {
-          app.logger.error(`[Service Dd] getJsApiConfig:getJsApiTicket Error`, ticketResultData);
+          app.logger.error(`[service:dd:getJsApiConfig] Error`, ticketResultData);
           throw new Error(ticketResultData);
         }
 
         let ticket = ticketResultData.ticket;
-        app.logger.info(`[Service Dd] getJsApiConfig:getJsApiTicket GET TICKET:  `, ticket);
+        app.logger.info(`[service:dd:getJsApiConfig] TICKET:  `, ticket);
 
         let ticketTimeout = ticketResultData.expires_in - 200; // 默认expires_in = 7200s
 
@@ -161,9 +163,6 @@ module.exports = app => {
           ticket: ticket
         });
 
-        let agentId = this._getAgentId(agentIdType);
-        app.logger.info(`[Service Dd] getJsApiConfig:getJsApiTicket using agentId:  `, agentId);
-
         jsApiConfig = {
           token: token,
           signature: signature,
@@ -177,11 +176,11 @@ module.exports = app => {
           yield app.redis.set(REDIS_KEY, JSON.stringify(jsApiConfig), "ex", ticketTimeout);
         }
 
-        app.logger.info(`[Service Dd] getJsApiConfig:getJsApiTicket END `, jsApiConfig);
       } else {
         jsApiConfig = JSON.parse(jsApiConfig);
-        app.logger.info(`[Service Dd] getJsApiConfig:getJsApiTicket END FROM REDIS CACHE`);
       }
+
+      app.logger.info(`[service:dd:getJsApiConfig] end: `, jsApiConfig);
 
       return jsApiConfig;
     }
@@ -192,7 +191,7 @@ module.exports = app => {
      */
     * getUserInfo(code, userIdOnly = false) {
 
-      app.logger.info(`[Service Dd] getUserInfoByAuthCode START `, code);
+      app.logger.info(`[service:dd:getUserInfo] start, code:${code}, userIdonly:${userIdOnly} `);
 
       let token = yield this.getToken();
       let userIdResult = yield this.app.curl(`https://oapi.dingtalk.com/user/getuserinfo?access_token=${token}&code=${code}`, {
@@ -204,13 +203,13 @@ module.exports = app => {
 
       /* istanbul ignore if */
       if (userIdResultData.errcode) {
-        app.logger.error(`[Service Dd] getUserInfo by auth code error`, userIdResultData);
+        app.logger.error(`[service:dd:getUserInfo] error get userid: `, userIdResultData);
         throw new Error(userIdResultData);
       }
 
       let userId = userIdResult.data.userid;
 
-      app.logger.info(`[Service Dd] getUserInfoByAuthCode STOP WHEN ONLY ID`, userId);
+      app.logger.info(`[service:dd:getUserInfo] end WITH ONLY ID, ddUserId: ${userId}`);
 
       if (userIdOnly) {
         return userId;
@@ -224,11 +223,11 @@ module.exports = app => {
 
       /* istanbul ignore if */
       if (infoResultData.errcode) {
-        app.logger.error(`[Service Dd] getUserInfo by userId`, userIdResultData);
-        throw new Error(userIdResultData);
+        app.logger.error(`[service:dd:getUserInfo] error get userInfo`, infoResultData);
+        throw new Error(infoResultData);
       }
 
-      app.logger.info(`[Service Dd] getUserInfoByAuthCode STOP WHEN FULL USER`, infoResultData);
+      app.logger.info(`[service:dd:getUserInfo] end:`, infoResultData);
 
       return infoResultData;
     }

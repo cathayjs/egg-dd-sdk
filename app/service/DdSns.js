@@ -18,11 +18,12 @@ module.exports = app => {
         /*******
          * 获取钉钉开放应用的ACCESS_TOKEN
          * https://open-doc.dingtalk.com/doc2/detail.htm?spm=a219a.7629140.0.0.WiN1vd&treeId=172&articleId=104968&docType=1#s0
+         * 貌似不支持缓存，文档写的不清楚
          * @returns {string}
          */
         * getToken() {
 
-            app.logger.info(`DdSns: before getToken to Dingding`);
+            app.logger.info(`[service:ddSns:getToken] start`);
 
             let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/gettoken?appid=${appId}&appsecret=${appSecret}`, {
                 dataType: 'json'
@@ -30,11 +31,10 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: getToken error:`, resultData);
-                throw new Error(JSON.stringify(resultData));
+                app.logger.error(`[service:ddSns:getToken] error:`, resultData);
             }
 
-            app.logger.info(`DdSns: end getToken to Dingding`);
+            app.logger.info(`[service:ddSns:getToken] end`);
 
             return resultData.access_token;
 
@@ -48,12 +48,9 @@ module.exports = app => {
          */
 
         * getPersistentCode(tmpAuthCode) {
-
             let token = yield this.getToken();
 
-            app.logger.info(`DdSns: before getPersistentCode to Dingding`);
-
-
+            app.logger.info(`[service:ddSns:getPersistentCode] start`);
             const result = yield this.app.curl(`https://oapi.dingtalk.com/sns/get_persistent_code?access_token=${token}`, {
                 method: 'POST',
                 contentType: "json",
@@ -66,9 +63,9 @@ module.exports = app => {
             const resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: getPersistentCode error: ${resultData}`);
+                app.logger.error(`[service:ddSns:getPersistentCode] error: ${resultData}`);
             }
-            app.logger.info(`DdSns: end getPersistentCode to Dingding`);
+            app.logger.info(`[service:ddSns:getPersistentCode] end`);
 
 
             return resultData;
@@ -84,7 +81,7 @@ module.exports = app => {
 
             let token = yield this.getToken();
 
-            app.logger.info(`DdSns: before getSnsToken to Dingding`);
+            app.logger.info(`[service:ddSns:getSnsToken] start`);
 
             let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/get_sns_token?access_token=${token}`, {
                 method: 'POST',
@@ -99,9 +96,9 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: getSnsToken error: `, resultData);
+                app.logger.error(`[service:ddSns:getSnsToken] error: `, resultData);
             }
-            app.logger.info(`DdSns: end getSnsToken to Dingding`);
+            app.logger.info(`[service:ddSns:getSnsToken] end`);
 
             return resultData.sns_token;
         }
@@ -113,8 +110,8 @@ module.exports = app => {
          * @returns {*}
          */
         * getUserInfo(snsToken) {
+            app.logger.info(`[service:ddSns:getUserInfo] start`);
 
-            app.logger.info(`DdSns: before getUserInfo to Dingding`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/getuserinfo?sns_token=${snsToken}`, {
                 dataType: 'json',
                 method: 'GET'
@@ -123,22 +120,22 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSns: getUserInfo error: ${resultData}`, JSON.stringify(resultData));
+                app.logger.error(`[service:ddSns:getUserInfo] error: `, resultData);
             }
-            app.logger.info(`DdSns: end getUserInfo to Dingding`);
+            app.logger.info(`[service:ddSns:getUserInfo] end`);
 
             return resultData.user_info;
         }
 
         * getUserByPersistentCode(persistentCode) {
 
-            app.logger.info(`DdSns: before getUserByPersistentCode to Dingding`);
+            app.logger.info(`[service:ddSns:getUserByPersistentCode] start`);
 
             let snsToken = yield this.getSnsToken(persistentCode);
 
             let userInfo = yield this.getUserInfo(snsToken);
 
-            app.logger.info(`DdSns: end getUserByPersitentCode to Dingding`);
+            app.logger.info(`[service:ddSns:getUserByPersistentCode] end`);
 
             return userInfo;
         }

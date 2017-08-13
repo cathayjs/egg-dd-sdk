@@ -17,6 +17,8 @@ module.exports = app => {
 
         * upload(filePath = __filename) {
 
+            app.logger.info(`[service:ddSpace:upload] start, filePath: ${filePath}`);
+
             let token = yield this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
@@ -27,7 +29,6 @@ module.exports = app => {
 
             form.file('media', filePath);
 
-            app.logger.info(`DdSpace: before upload media to space Dingding`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/file/upload/single?access_token=${token}&agent_id=${agentId}&file_size=${filesize}`, {
                 dataType: 'json',
                 headers: form.headers(),
@@ -38,23 +39,24 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSpace:  upload media to space error: `, resultData);
-                throw new Error(JSON.stringify(resultData));
+                app.logger.error(`[service:ddSpace:upload] error: `, resultData);
             }
-            app.logger.info(`DdSpace: end  upload media to space to Dingding`);
+            app.logger.info(`[service:ddSpace:upload] end`);
 
             return resultData.media_id;
         }
 
 
         * send(mediaId, userId, fileName) {
+
+            app.logger.info(`[service:ddSpace:send] start, mediaId: ${mediaId}, userId: ${userId}`);
+
             let token = yield this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             mediaId = encodeURIComponent(mediaId);
             fileName = encodeURIComponent(fileName);
 
-            app.logger.info(`DdSpace: before send media to user to Dingding`);
             let result = yield this.app.curl(`https://oapi.dingtalk.com/cspace/add_to_single_chat?access_token=${token}&agent_id=${agentId}&userid=${userId}&media_id=${mediaId}&file_name=${fileName}`, {
                 method: 'POST',
                 dataType: 'json'
@@ -63,11 +65,10 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSpace: send media to user error:`, resultData);
-                throw new Error(JSON.stringify(resultData));
+                app.logger.error(`[service:ddSpace:send] error:`, resultData);
             }
 
-            app.logger.info(`DdSpace: end send media to user to Dingding`);
+            app.logger.info(`[service:ddSpace:send] end`);
 
             return true;
         }
@@ -77,13 +78,14 @@ module.exports = app => {
          * 未测试
          */
         * send2space(mediaId, userId, fileName) {
+            app.logger.info(`[service:ddSpace:send2space] before send media to user to Dingding`);
+
             let token = yield this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             mediaId = encodeURIComponent(mediaId);
             fileName = encodeURIComponent(fileName);
-
-            app.logger.info(`DdSpace: before send media to user to Dingding`);
+            
             let result = yield this.app.curl(`https://oapi.dingtalk.com/cspace/add?access_token=${token}&agent_id=${agentId}&code=CODE&media_id=MEDIA_ID&space_id=SPACE_ID&folder_id=FOLDER_ID&name=NAME&overwrite=OVERWRITE`, {
                 method: 'POST'
             });
@@ -91,9 +93,9 @@ module.exports = app => {
             let resultData = result.data;
 
             if (resultData.errcode) {
-                app.logger.error(`DdSpace: send media to user error:`, resultData);
+                app.logger.error(`[service:ddSpace:send2space] send media to user error:`, resultData);
             }
-            app.logger.info(`DdSpace: end send media to user to Dingding`);
+            app.logger.info(`[service:ddSpace:send2space] end send media to user to Dingding`);
 
             return resultData;
         }
