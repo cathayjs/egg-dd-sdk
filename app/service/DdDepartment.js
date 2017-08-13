@@ -88,7 +88,7 @@ module.exports = app => {
          */
         * updateDepartment(departmentInfo) {
 
-            this.app.logger.info(`[service:ddDepartment:updateDepartment] start, updateDepartment: `, updateDepartment);
+            this.app.logger.info(`[service:ddDepartment:updateDepartment] start, updateDepartment: `, departmentInfo);
 
             let token = yield this.ctx.service.dd.getToken();
             let result = yield this.app.curl(`https://oapi.dingtalk.com/department/update?access_token=${token}`, {
@@ -102,10 +102,9 @@ module.exports = app => {
 
             if (resultData.errcode) {
                 this.app.logger.error(`[service:ddDepartment:updateDepartment] error: `, resultData);
-                throw new Error(JSON.stringify(resultData));
             }
 
-            this.app.logger.info(`[service:ddDepartment:updateDepartment] end `);
+            this.app.logger.info(`[service:ddDepartment:updateDepartment] end`);
 
             return resultData;
         }
