@@ -14,12 +14,13 @@ describe('service/DdProcess.js', () => {
   });
   afterEach(mock.restore);
 
-  it('createProcess()', function* () {
+  it.only('createProcess()', function* () {
     let processInstanceId = yield ctx.service.ddProcess.createProcess({
       process_code: 'PROC-EF6YRO35P2-UXZMQYQNS8GZV2WMIMUV3-KXYSQQ5J-U',
       originator_user_id: 'manager3882',
       dept_id: '45957469',
-      approvers: 'manager3882',
+      approvers: ['manager3882', '0847412208841146'],
+      // approvers: 'manager3882,0847412208841146',
       // approvers: '012039633556498,043811683437365276',
       form_component_values: [
         {

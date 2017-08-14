@@ -16,6 +16,12 @@ module.exports = app => {
         * createProcess(options) {
             let token = yield this.ctx.service.dd.getToken();
 
+            let approvers = options.approvers;
+
+            if (Array.isArray(approvers)) {
+                approvers = approvers.join(',');
+            }
+
             let finalData = Object.assign({
                 method: 'dingtalk.smartwork.bpms.processinstance.create',
                 session: token,
@@ -27,7 +33,7 @@ module.exports = app => {
                     process_code: options.process_code,
                     originator_user_id: options.originator_user_id,
                     dept_id: options.dept_id,
-                    approvers: options.approvers,
+                    approvers: approvers,
                     form_component_values: JSON.stringify(options.form_component_values)
                 });
 
