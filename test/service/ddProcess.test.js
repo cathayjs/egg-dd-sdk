@@ -14,7 +14,7 @@ describe('service/DdProcess.js', () => {
   });
   afterEach(mock.restore);
 
-  it.only('createProcess()', function* () {
+  it('createProcess()', function* () {
     let processInstanceId = yield ctx.service.ddProcess.createProcess({
       process_code: 'PROC-EF6YRO35P2-UXZMQYQNS8GZV2WMIMUV3-KXYSQQ5J-U',
       originator_user_id: 'manager3882',
