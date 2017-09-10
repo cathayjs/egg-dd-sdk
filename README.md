@@ -32,7 +32,7 @@ package.json
 ```json
 {
     "dependecies": {
-        "egg-cathay-sso-client": "0.1.4"
+        "egg-dd-sdk": "0.1.4"
     }
 }
 ```
@@ -60,9 +60,9 @@ module.exports.DD_CONFIG = {
 config/plugin.js
 
 ```js
-exports.sso = {
+exports.dd = {
   enable: true,
-  path: 'egg-dd-sdk',
+  package: 'egg-dd-sdk',
 };
 ```
 
