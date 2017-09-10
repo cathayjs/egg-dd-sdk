@@ -1,6 +1,6 @@
 {
   "name": "egg-dd-sdk",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "eggPlugin": {},
   "scripts": {
     "test": "egg-bin test"

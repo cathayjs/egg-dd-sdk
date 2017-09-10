@@ -17,7 +17,7 @@ describe('service/DdDepartment.js', () => {
 
     it('getDepartments()', function* () {
         const result = yield ctx.service.ddDepartment.getDepartments();
-        assert(result.length === 3 && result[0].id === 1);
+        assert(result.length > 3 && result[0].id === 1);
     });
 
     it('getDepartment(departmentId)', function* () {
@@ -28,13 +28,13 @@ describe('service/DdDepartment.js', () => {
 
     it('create and delete department()', function* () {
         let name = mockjs.Random.name();
-        const result = yield ctx.service.ddDepartment.createDepartment({
+        const id = yield ctx.service.ddDepartment.createDepartment({
             name: name,
             parentid: 1
         });
-        assert(result.id);
+        assert(id);
 
-        let deleted = yield ctx.service.ddDepartment.deleteDepartment(result.id);
+        let deleted = yield ctx.service.ddDepartment.deleteDepartment(id);
         assert(deleted.errcode === 0);
     });
 

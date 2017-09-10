@@ -78,7 +78,7 @@ module.exports = app => {
 
             this.app.logger.info(`[service:ddDepartment:createDepartment] end`);
 
-            return resultData;
+            return resultData.id;
         }
 
 
@@ -124,7 +124,6 @@ module.exports = app => {
 
             if (resultData.errcode) {
                 this.app.logger.error(`[service:ddDepartment:deleteDepartment] error: `, resultData);
-                throw new Error(resultData);
             }
             this.app.logger.info(`[service:ddDepartment:deleteDepartment] end`);
 
