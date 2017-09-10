@@ -26,6 +26,46 @@
 > 
 > API文档请参见：https://cathayjs.github.io/egg-dd-sdk/
 
+## egg 配置说明
+
+package.json
+```json
+{
+    "dependecies": {
+        "egg-cathay-sso-client": "0.1.4"
+    }
+}
+```
+
+
+config/config.default.js
+
+```js
+module.exports.DD_CONFIG = {
+    corpId: "dingdcf94075751f540635c2f4657eb6378f",
+    secret: "C-uQKbuaA1zrne3ni2fwBfifMir9h4MEQTIrRi2LoQiE68LdxIWhBqnFxKLYABWT",
+    token: '123456',    // 加解密时有用到
+    aesKey: "1234567890123456789012345678901234567890123",  // 加解密时有用到
+    agentId: {
+        'default': '116146340'
+    },
+    nonceStr: "123456",
+    sso: {
+        appId: 'dingoa9l870sdqembng3je',
+        appSecret: 'h0Y1uH4w4nkToIvzJzd6VKRNbJsqevOi791B0eeOVM87GrumW4xLEGOQqjzmo9eK'
+    }
+};
+```
+
+config/plugin.js
+
+```js
+exports.sso = {
+  enable: true,
+  path: 'egg-dd-sdk',
+};
+```
+
 ## NEXT
 
 此目录为所有[钉钉官方服务端开发文档](https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.8cqfMW&treeId=385&articleId=104981&docType=1)的目录结构，打钩的是实现的：

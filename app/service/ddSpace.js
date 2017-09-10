@@ -27,11 +27,13 @@ module.exports = app => {
             let stateResult = fs.statSync(filePath);
             let filesize = stateResult.size;
 
-            form.file('media', filePath);
+            form.file('media', filePath, 'filename.txt', filesize);
+
+            const headers = form.headers();
 
             let result = yield this.app.curl(`https://oapi.dingtalk.com/file/upload/single?access_token=${token}&agent_id=${agentId}&file_size=${filesize}`, {
                 dataType: 'json',
-                headers: form.headers(),
+                headers: headers,
                 stream: form,
                 method: 'POST'
             });
@@ -85,7 +87,7 @@ module.exports = app => {
 
             mediaId = encodeURIComponent(mediaId);
             fileName = encodeURIComponent(fileName);
-            
+
             let result = yield this.app.curl(`https://oapi.dingtalk.com/cspace/add?access_token=${token}&agent_id=${agentId}&code=CODE&media_id=MEDIA_ID&space_id=SPACE_ID&folder_id=FOLDER_ID&name=NAME&overwrite=OVERWRITE`, {
                 method: 'POST'
             });
