@@ -17,9 +17,13 @@ module.exports = app => {
             let token = yield this.ctx.service.dd.getToken();
 
             let approvers = options.approvers;
+            let cc_list = options.cc_list;
 
             if (Array.isArray(approvers)) {
                 approvers = approvers.join(',');
+            }
+            if (Array.isArray(cc_list)) {
+                cc_list = cc_list.join(',');
             }
 
             let finalData = Object.assign({
@@ -34,6 +38,8 @@ module.exports = app => {
                     originator_user_id: options.originator_user_id,
                     dept_id: options.dept_id,
                     approvers: approvers,
+                    cc_list: cc_list || '',
+                    cc_position: options.cc_position || 'START',
                     form_component_values: JSON.stringify(options.form_component_values)
                 });
 
