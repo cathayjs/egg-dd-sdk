@@ -1,3 +1,8 @@
+## 0.2.0
+
+* 增加 `service.department.getDepartmentFullPathByUser()`
+* 增加 `service.department.getDepartmentFullPathByDepartment()`
+
 ## 0.1.0
 
 * 增加`ddMedia` service

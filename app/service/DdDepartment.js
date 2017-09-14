@@ -8,7 +8,45 @@ module.exports = app => {
             super(ctx);
         }
 
-        // TODO 貌似没有被调用, 是否需要删除
+        * getDepartmentFullPathByUser(ddUserId) {
+
+            this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByUser] start, ddUserId: ${ddUserId}`);
+
+            const token = yield this.ctx.service.dd.getToken();
+            const result = yield this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts?access_token=${token}&userId=${ddUserId}`, {
+                dataType: 'json',
+                method: 'GET'
+            });
+            const resultData = result.data;
+
+            if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:getDepartmentFullPathByUser] error: `, resultData);
+                throw new Error('[service:ddDepartment:getDepartmentFullPathByUser] error');
+            }
+            this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByUser] end`);
+
+            return resultData.department;
+        }
+
+        * getDepartmentFullPathByDepartment(departmentId) {
+            this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByDepartment] start, departmentId: ${departmentId}`);
+
+            const token = yield this.ctx.service.dd.getToken();
+            const result = yield this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts_by_dept?access_token=${token}&id=${departmentId}`, {
+                dataType: 'json',
+                method: 'GET'
+            });
+            const resultData = result.data;
+
+            if (resultData.errcode) {
+                this.app.logger.error(`[service:ddDepartment:getDepartmentFullPathByDepartment] error: `, resultData);
+                throw new Error('[service:ddDepartment:getDepartmentFullPathByDepartment] error');
+            }
+            this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByDepartment] end`);
+
+            return resultData.parentIds;
+        }
+
         * getDepartment(departmentId) {
 
             this.app.logger.info(`[service:ddDepartment:getDepartment] start, departmentId: ${departmentId}`);
@@ -56,7 +94,6 @@ module.exports = app => {
         }
 
 
-        // TODO 未被使用
         * createDepartment(departmentInfo) {
 
             this.app.logger.info(`[service:ddDepartment:createDepartment] start, departmentInfo: `, departmentInfo);
@@ -109,7 +146,6 @@ module.exports = app => {
             return resultData;
         }
 
-        // TODO 未被使用
         * deleteDepartment(departmentId) {
             let token = yield this.ctx.service.dd.getToken();
 

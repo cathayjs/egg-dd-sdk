@@ -15,14 +15,26 @@ describe('service/DdDepartment.js', () => {
     });
     after(mock.restore);
 
+
+    it('getDepartmentFullPathByUser()', function* () {
+        const result = yield ctx.service.ddDepartment.getDepartmentFullPathByUser('manager3882');
+        assert(result.length === 2 && result[0].length == 2 && result[1].length === 3);
+    });
+    it('getDepartmentFullPathByDepartment()', function* () {
+        const result = yield ctx.service.ddDepartment.getDepartmentFullPathByDepartment(50094428);
+        assert.deepEqual(result, [ 50094428, 45957469, 1 ]);
+    });
     it('getDepartments()', function* () {
         const result = yield ctx.service.ddDepartment.getDepartments();
         assert(result.length > 3 && result[0].id === 1);
     });
 
-    it('getDepartment(departmentId)', function* () {
-        const result = yield ctx.service.ddDepartment.getDepartment(1);
-        assert(result.name === 'NODE SDK');
+    it('getDepartment(departmentId) check manager && group owner', function* () {
+        const result1 = yield ctx.service.ddDepartment.getDepartment(1);
+        assert(result1.name === 'NODE SDK');
+        assert(result1.orgDeptOwner === 'manager3882');
+        const result2 = yield ctx.service.ddDepartment.getDepartment(45957469);
+        assert(result2.deptManagerUseridList === 'manager3882');
     });
 
 
