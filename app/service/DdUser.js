@@ -161,6 +161,30 @@ module.exports = app => {
       return resultData;
     }
 
+    /***************
+     */
+    async getUseridByUnionid(unionid) {
+
+      this.app.logger.info('[service:ddUser:getUseridByUnionid] start:', unionid);
+
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/getUseridByUnionid?access_token=${token}&unionid=${unionid}`, {
+        dataType: 'json',
+        contentType: 'json',
+        method: 'GET'
+      });
+      let resultData = result.data;
+
+      /* istanbul ignore if */
+      if (resultData.errcode) {
+        this.app.logger.error('[service:ddUser:getUseridByUnionid] error:', resultData);
+      }
+
+      this.app.logger.info('[service:ddUser:getUseridByUnionid] end');
+
+      return resultData.userid;
+    }
+
     /************
      * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s9
      * @param userId

@@ -1,3 +1,7 @@
+## 1.1.0
+
+* 增加uniconid换取userid接口
+
 ## 1.0.0
 
 * 改为async/await
