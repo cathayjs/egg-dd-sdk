@@ -16,20 +16,20 @@ module.exports = app => {
          * 
          * @param events
          */
-        * registerEvents(callbackUrl, events = ["user_add_org", "user_modify_org", "user_leave_org"], isUpdate = false) {
+        async registerEvents(callbackUrl, events = ["user_add_org", "user_modify_org", "user_leave_org"], isUpdate = false) {
 
             // events = ["user_add_org", "user_modify_org", "user_leave_org", "org_admin_add", "org_admin_remove", "org_dept_create", "org_dept_modify", "org_dept_remove", "org_remove", "label_user_change", "label_conf_add", "label_conf_modify", "label_conf_del", "org_change", "chat_add_member", "chat_remove_member", "chat_quit", "chat_update_owner", "chat_update_title", "chat_disband", "chat_disband_microapp", "check_in", "bpms_task_change", "bpms_instance_change"];
 
             this.app.logger.info('[service:ddEvents:registerEvents] start, isUpdate ', isUpdate);
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
 
             let url = 'https://oapi.dingtalk.com/call_back/register_call_back';
             if (isUpdate) {
                 url = 'https://oapi.dingtalk.com/call_back/update_call_back';
             }
 
-            let result = yield this.app.curl(`${url}?access_token=${token}`, {
+            let result = await this.app.curl(`${url}?access_token=${token}`, {
                 dataType: 'json',
                 method: 'POST',
                 contentType: 'json',
@@ -53,17 +53,17 @@ module.exports = app => {
         }
 
 
-        * updateEvents(events) {
-            return yield this.registerEvents(events, true);
+        async updateEvents(events) {
+            return await this.registerEvents(events, true);
         }
 
-        * deleteEvents() {
+        async deleteEvents() {
 
             this.app.logger.info('[service:ddEvents:deleteEvents] start');
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/call_back/delete_call_back?access_token=${token}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/call_back/delete_call_back?access_token=${token}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -81,13 +81,13 @@ module.exports = app => {
         }
 
 
-        * queryEvents() {
+        async queryEvents() {
 
             this.app.logger.info('[service:ddEvents:queryEvents] start');
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/call_back/get_call_back?access_token=${token}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/call_back/get_call_back?access_token=${token}`, {
                 dataType: 'json',
                 method: 'GET'
             });

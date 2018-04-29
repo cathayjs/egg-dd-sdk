@@ -12,12 +12,12 @@ module.exports = app => {
      * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.6nS7Sz&treeId=172&articleId=104979&docType=1#s6
      * @param userId
      */
-    * getUser(userId) {
+    async getUser(userId) {
 
       this.app.logger.info('[service:ddUser:getUser] start, userId:', userId);
 
-      let token = yield this.ctx.service.dd.getToken();
-      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/get?access_token=${token}&userid=${userId}`, {
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/get?access_token=${token}&userid=${userId}`, {
         dataType: 'json',
         method: 'GET'
       });
@@ -33,17 +33,17 @@ module.exports = app => {
       return resultData;
     }
 
-    * getUsers(departmentId = "", casade = true) {
+    async getUsers(departmentId = "", casade = true) {
 
       try {
         let ddUsers = [];
         this.app.logger.info(`[service:ddUser:getUsers] before getUsers, departmentId: ${departmentId}, casade: ${casade}`);
 
         if (!casade) {
-          ddUsers = yield this.getUsersByDepartment(departmentId);
+          ddUsers = await this.getUsersByDepartment(departmentId);
         } else {
 
-          let departments = yield this.ctx.service.ddDepartment.getDepartments(departmentId);
+          let departments = await this.ctx.service.ddDepartment.getDepartments(departmentId);
           departments = departments.map((department) => {
             return department.id;
           });
@@ -53,7 +53,7 @@ module.exports = app => {
           }
 
           for (let departmentId of departments) {
-            let subUsers = yield this.getUsersByDepartment(departmentId);
+            let subUsers = await this.getUsersByDepartment(departmentId);
             ddUsers = ddUsers.concat(subUsers);
           }
         }
@@ -73,12 +73,12 @@ module.exports = app => {
 
     }
 
-    * getUsersByDepartment(departmentId, offset = 0, size = 100) {
+    async getUsersByDepartment(departmentId, offset = 0, size = 100) {
 
       this.app.logger.info(`[service:ddUser:getUsersByDepartment] start, departmentId: ${departmentId}, offset: ${offset}`);
 
-      let token = yield this.ctx.service.dd.getToken();
-      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/list?offset=${offset}&size=${size}&access_token=${token}&department_id=${departmentId}`, {
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/list?offset=${offset}&size=${size}&access_token=${token}&department_id=${departmentId}`, {
         dataType: 'json',
         method: 'GET'
       });
@@ -93,7 +93,7 @@ module.exports = app => {
       let users = resultData.userlist || [];
 
       if (resultData.hasMore) {
-        let more = yield this.getUsersByDepartment(departmentId, offset + size, size);
+        let more = await this.getUsersByDepartment(departmentId, offset + size, size);
         users = users.concat(more);
       }
 
@@ -108,12 +108,12 @@ module.exports = app => {
      * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s9
      * @param userInfo
      */
-    * createUser(userInfo) {
+    async createUser(userInfo) {
 
       this.app.logger.info('[service:ddUser:createUser] start:', userInfo);
 
-      let token = yield this.ctx.service.dd.getToken();
-      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/create?access_token=${token}`, {
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/create?access_token=${token}`, {
         dataType: 'json',
         contentType: 'json',
         method: 'POST',
@@ -138,12 +138,12 @@ module.exports = app => {
      * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s9
      * @param userInfo
      */
-    * updateUser(userInfo) {
+    async updateUser(userInfo) {
 
       this.app.logger.info('[service:ddUser:updateUser] start:', userInfo);
 
-      let token = yield this.ctx.service.dd.getToken();
-      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/update?access_token=${token}`, {
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/update?access_token=${token}`, {
         dataType: 'json',
         contentType: 'json',
         method: 'POST',
@@ -168,12 +168,12 @@ module.exports = app => {
      * @param force
      * @returns {boolean}
      */
-    * deleteUser(userId, times = 1) {
+    async deleteUser(userId, times = 1) {
 
       this.app.logger.info('[service:ddUser:deleteUser] start, userId:', userId);
 
-      let token = yield this.ctx.service.dd.getToken();
-      let result = yield this.app.curl(`https://oapi.dingtalk.com/user/delete?access_token=${token}&userid=${userId}`, {
+      let token = await this.ctx.service.dd.getToken();
+      let result = await this.app.curl(`https://oapi.dingtalk.com/user/delete?access_token=${token}&userid=${userId}`, {
         dataType: 'json',
         method: 'GET'
       });
@@ -184,7 +184,7 @@ module.exports = app => {
         this.ctx.app.logger.error('[service:ddUser:deleteUser] error:', resultData, times);
         if (times < 3) {
           times++;
-          yield this.deleteUser(userId, times);
+          await this.deleteUser(userId, times);
         } else {
           throw new Error(`[service:ddUser:deleteUser] delete dd user error ${userId}, tried 3 times`);
         }

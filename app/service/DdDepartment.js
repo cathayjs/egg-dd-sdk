@@ -8,12 +8,12 @@ module.exports = app => {
             super(ctx);
         }
 
-        * getDepartmentFullPathByUser(ddUserId) {
+        async getDepartmentFullPathByUser(ddUserId) {
 
             this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByUser] start, ddUserId: ${ddUserId}`);
 
-            const token = yield this.ctx.service.dd.getToken();
-            const result = yield this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts?access_token=${token}&userId=${ddUserId}`, {
+            const token = await this.ctx.service.dd.getToken();
+            const result = await this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts?access_token=${token}&userId=${ddUserId}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -28,11 +28,11 @@ module.exports = app => {
             return resultData.department;
         }
 
-        * getDepartmentFullPathByDepartment(departmentId) {
+        async getDepartmentFullPathByDepartment(departmentId) {
             this.app.logger.info(`[service:ddDepartment:getDepartmentFullPathByDepartment] start, departmentId: ${departmentId}`);
 
-            const token = yield this.ctx.service.dd.getToken();
-            const result = yield this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts_by_dept?access_token=${token}&id=${departmentId}`, {
+            const token = await this.ctx.service.dd.getToken();
+            const result = await this.app.curl(`https://oapi.dingtalk.com/department/list_parent_depts_by_dept?access_token=${token}&id=${departmentId}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -47,12 +47,12 @@ module.exports = app => {
             return resultData.parentIds;
         }
 
-        * getDepartment(departmentId) {
+        async getDepartment(departmentId) {
 
             this.app.logger.info(`[service:ddDepartment:getDepartment] start, departmentId: ${departmentId}`);
 
-            let token = yield this.ctx.service.dd.getToken();
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/department/get?access_token=${token}&id=${departmentId}`, {
+            let token = await this.ctx.service.dd.getToken();
+            let result = await this.app.curl(`https://oapi.dingtalk.com/department/get?access_token=${token}&id=${departmentId}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -68,12 +68,12 @@ module.exports = app => {
         }
 
 
-        * getDepartments(parentId = '') {
+        async getDepartments(parentId = '') {
 
             this.app.logger.info(`[service:ddDepartment:getDepartments] start, parentId: ${parentId}`);
 
-            let token = yield this.ctx.service.dd.getToken();
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/department/list?access_token=${token}&id=${parentId}`, {
+            let token = await this.ctx.service.dd.getToken();
+            let result = await this.app.curl(`https://oapi.dingtalk.com/department/list?access_token=${token}&id=${parentId}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -94,12 +94,12 @@ module.exports = app => {
         }
 
 
-        * createDepartment(departmentInfo) {
+        async createDepartment(departmentInfo) {
 
             this.app.logger.info(`[service:ddDepartment:createDepartment] start, departmentInfo: `, departmentInfo);
 
-            let token = yield this.ctx.service.dd.getToken();
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/department/create?access_token=${token}`, {
+            let token = await this.ctx.service.dd.getToken();
+            let result = await this.app.curl(`https://oapi.dingtalk.com/department/create?access_token=${token}`, {
                 dataType: 'json',
                 contentType: 'json',
                 method: 'POST',
@@ -123,12 +123,12 @@ module.exports = app => {
          * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.W4WlHX&treeId=172&articleId=104979&docType=1#s3
          * @param departmentInfo
          */
-        * updateDepartment(departmentInfo) {
+        async updateDepartment(departmentInfo) {
 
             this.app.logger.info(`[service:ddDepartment:updateDepartment] start, updateDepartment: `, departmentInfo);
 
-            let token = yield this.ctx.service.dd.getToken();
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/department/update?access_token=${token}`, {
+            let token = await this.ctx.service.dd.getToken();
+            let result = await this.app.curl(`https://oapi.dingtalk.com/department/update?access_token=${token}`, {
                 dataType: 'json',
                 contentType: 'json',
                 method: 'POST',
@@ -146,12 +146,12 @@ module.exports = app => {
             return resultData;
         }
 
-        * deleteDepartment(departmentId) {
-            let token = yield this.ctx.service.dd.getToken();
+        async deleteDepartment(departmentId) {
+            let token = await this.ctx.service.dd.getToken();
 
             this.app.logger.info(`[service:ddDepartment:deleteDepartment] start, departmentId: `, departmentId);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/department/delete?access_token=${token}&id=${departmentId}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/department/delete?access_token=${token}&id=${departmentId}`, {
                 dataType: 'json',
                 method: 'GET'
             });

@@ -1,3 +1,7 @@
+## 1.0.0
+
+* 改为async/await
+
 ## 0.2.0
 
 * 增加 `service.department.getDepartmentFullPathByUser()`

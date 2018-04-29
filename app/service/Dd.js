@@ -34,18 +34,18 @@ module.exports = app => {
       return agentId;
     }
 
-    * getToken() {
+    async getToken() {
 
       let accessToken;
       if (app.redis) {
-        accessToken = yield app.redis.get('corpAccessToken');
+        accessToken = await app.redis.get('corpAccessToken');
       }
 
       // 更新corpAccessToken
       if (!accessToken) {
         app.logger.info(`[service:dd:getToken] start`);
 
-        let result = yield this.app.curl(`https://oapi.dingtalk.com/gettoken?corpid=${ddConfig.corpId}&corpsecret=${ddConfig.secret}`, {
+        let result = await this.app.curl(`https://oapi.dingtalk.com/gettoken?corpid=${ddConfig.corpId}&corpsecret=${ddConfig.secret}`, {
           dataType: 'json'
         });
         let resultData = result.data;
@@ -60,7 +60,7 @@ module.exports = app => {
         accessToken = resultData.access_token;
 
         if (app.redis) {
-          yield app.redis.set('corpAccessToken', accessToken, "ex", 5400);
+          await app.redis.set('corpAccessToken', accessToken, "ex", 5400);
         }
       }
 
@@ -76,17 +76,17 @@ module.exports = app => {
      * @param data
      * @returns {boolean}
      */
-    * sendMessageByDdUserId(ddUserId, messageObj, agentIdType) {
+    async sendMessageByDdUserId(ddUserId, messageObj, agentIdType) {
 
       if (Array.isArray(ddUserId)) {
         ddUserId = ddUserId.join('|');
       }
 
-      let token = yield this.getToken();
+      let token = await this.getToken();
 
       app.logger.info(`[service:dd:sendMessageByDdUserId] start, ddUserId:`, ddUserId);
 
-      const result = yield this.app.curl(`https://oapi.dingtalk.com/message/send?access_token=${token}`, {
+      const result = await this.app.curl(`https://oapi.dingtalk.com/message/send?access_token=${token}`, {
         method: 'POST',
         contentType: "json",
         dataType: 'json',
@@ -116,7 +116,7 @@ module.exports = app => {
      * @param originUrl
      * @returns {{token: *, signature: *, nonceStr: (string|string), timeStamp: number, corpId: (string|string), agentId: *}}
      */
-    * getJsApiConfig(originUrl, agentIdType) {
+    async getJsApiConfig(originUrl, agentIdType) {
 
       assert(originUrl, '[service:dd:getJsApiConfig] getJsApiConfig originUrl is required');
 
@@ -129,13 +129,13 @@ module.exports = app => {
       let jsApiConfig;
 
       if (app.redis) {
-        jsApiConfig = yield app.redis.get(REDIS_KEY);
+        jsApiConfig = await app.redis.get(REDIS_KEY);
       }
 
       if (!jsApiConfig) {
 
-        let token = yield this.getToken();
-        let ticketResult = yield this.app.curl(`https://oapi.dingtalk.com/get_jsapi_ticket?type=jsapi&access_token=${token}`, {
+        let token = await this.getToken();
+        let ticketResult = await this.app.curl(`https://oapi.dingtalk.com/get_jsapi_ticket?type=jsapi&access_token=${token}`, {
           dataType: 'json'
         });
         let ticketResultData = ticketResult.data;
@@ -173,7 +173,7 @@ module.exports = app => {
         };
 
         if (app.redis) {
-          yield app.redis.set(REDIS_KEY, JSON.stringify(jsApiConfig), "ex", ticketTimeout);
+          await app.redis.set(REDIS_KEY, JSON.stringify(jsApiConfig), "ex", ticketTimeout);
         }
 
       } else {
@@ -189,12 +189,12 @@ module.exports = app => {
      * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.p1ESs4&treeId=172&articleId=104969&docType=1
      * @param code
      */
-    * getUserInfo(code, userIdOnly = false) {
+    async getUserInfo(code, userIdOnly = false) {
 
       app.logger.info(`[service:dd:getUserInfo] start, code:${code}, userIdonly:${userIdOnly} `);
 
-      let token = yield this.getToken();
-      let userIdResult = yield this.app.curl(`https://oapi.dingtalk.com/user/getuserinfo?access_token=${token}&code=${code}`, {
+      let token = await this.getToken();
+      let userIdResult = await this.app.curl(`https://oapi.dingtalk.com/user/getuserinfo?access_token=${token}&code=${code}`, {
         dataType: 'json',
         method: 'GET'
       });
@@ -215,7 +215,7 @@ module.exports = app => {
         return userId;
       }
 
-      let infoResult = yield this.app.curl(`https://oapi.dingtalk.com/user/get?access_token=${token}&userid=${userId}`, {
+      let infoResult = await this.app.curl(`https://oapi.dingtalk.com/user/get?access_token=${token}&userid=${userId}`, {
         dataType: 'json',
         method: 'GET'
       });

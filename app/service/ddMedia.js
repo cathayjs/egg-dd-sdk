@@ -16,15 +16,15 @@ module.exports = app => {
             super(ctx);
         }
 
-        * upload(filePath = __filename) {
+        async upload(filePath = __filename) {
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
 
             const form = new FormStream();
             form.file('media', filePath);
 
             app.logger.info(`[service:ddMedia:upload] start`);
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/media/upload?access_token=${token}&type=file`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/media/upload?access_token=${token}&type=file`, {
                 dataType: 'json',
                 headers: form.headers(),
                 stream: form,
@@ -43,11 +43,11 @@ module.exports = app => {
         }
 
 
-        * get(mediaId) {
-            let token = yield this.ctx.service.dd.getToken();
+        async get(mediaId) {
+            let token = await this.ctx.service.dd.getToken();
 
             app.logger.info(`[service:ddMedia:get] start, mediaId: ${mediaId}`);
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/media/downloadFile?access_token=${token}&media_id=${mediaId}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/media/downloadFile?access_token=${token}&media_id=${mediaId}`, {
                 method: 'GET'
             });
 

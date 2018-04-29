@@ -13,8 +13,8 @@ module.exports = app => {
         /**********
          * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.rgrrdz&treeId=355&articleId=29498&docType=2
          */
-        * createProcess(options) {
-            let token = yield this.ctx.service.dd.getToken();
+        async createProcess(options) {
+            let token = await this.ctx.service.dd.getToken();
 
             let approvers = options.approvers;
             let cc_list = options.cc_list;
@@ -46,7 +46,7 @@ module.exports = app => {
             this.app.logger.info('[service:ddProcess:createProcess] start, data:', finalData);
 
             // 不需要设置 contentType，HttpClient 会默认以 application/x-www-form-urlencoded 格式发送请求
-            let result = yield this.app.curl('https://eco.taobao.com/router/rest', {
+            let result = await this.app.curl('https://eco.taobao.com/router/rest', {
                 dataType: 'json',
                 method: 'POST',
                 data: finalData
@@ -73,11 +73,11 @@ module.exports = app => {
         /**********
          * https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.fNHF7j&treeId=355&articleId=29833&docType=2
          */
-        * listProcess(options) {
+        async listProcess(options) {
 
             this.app.logger.info('[service:ddProcess:listProcess] start');
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
 
             let startTime = new Date().getTime();
 
@@ -96,7 +96,7 @@ module.exports = app => {
                 });
 
             // 不需要设置 contentType，HttpClient 会默认以 application/x-www-form-urlencoded 格式发送请求
-            let result = yield this.app.curl('https://eco.taobao.com/router/rest', {
+            let result = await this.app.curl('https://eco.taobao.com/router/rest', {
                 dataType: 'json',
                 method: 'POST',
                 data: finalData

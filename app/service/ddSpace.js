@@ -15,11 +15,11 @@ module.exports = app => {
             super(ctx);
         }
 
-        * upload(filePath = __filename) {
+        async upload(filePath = __filename) {
 
             app.logger.info(`[service:ddSpace:upload] start, filePath: ${filePath}`);
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             const form = new FormStream();
@@ -31,7 +31,7 @@ module.exports = app => {
 
             const headers = form.headers();
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/file/upload/single?access_token=${token}&agent_id=${agentId}&file_size=${filesize}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/file/upload/single?access_token=${token}&agent_id=${agentId}&file_size=${filesize}`, {
                 dataType: 'json',
                 headers: headers,
                 stream: form,
@@ -49,17 +49,17 @@ module.exports = app => {
         }
 
 
-        * send(mediaId, userId, fileName) {
+        async send(mediaId, userId, fileName) {
 
             app.logger.info(`[service:ddSpace:send] start, mediaId: ${mediaId}, userId: ${userId}`);
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             mediaId = encodeURIComponent(mediaId);
             fileName = encodeURIComponent(fileName);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/cspace/add_to_single_chat?access_token=${token}&agent_id=${agentId}&userid=${userId}&media_id=${mediaId}&file_name=${fileName}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/cspace/add_to_single_chat?access_token=${token}&agent_id=${agentId}&userid=${userId}&media_id=${mediaId}&file_name=${fileName}`, {
                 method: 'POST',
                 dataType: 'json'
             });
@@ -79,16 +79,16 @@ module.exports = app => {
         /****
          * 未测试
          */
-        * send2space(mediaId, userId, fileName) {
+        async send2space(mediaId, userId, fileName) {
             app.logger.info(`[service:ddSpace:send2space] before send media to user to Dingding`);
 
-            let token = yield this.ctx.service.dd.getToken();
+            let token = await this.ctx.service.dd.getToken();
             let agentId = this.ctx.service.dd._getAgentId();
 
             mediaId = encodeURIComponent(mediaId);
             fileName = encodeURIComponent(fileName);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/cspace/add?access_token=${token}&agent_id=${agentId}&code=CODE&media_id=MEDIA_ID&space_id=SPACE_ID&folder_id=FOLDER_ID&name=NAME&overwrite=OVERWRITE`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/cspace/add?access_token=${token}&agent_id=${agentId}&code=CODE&media_id=MEDIA_ID&space_id=SPACE_ID&folder_id=FOLDER_ID&name=NAME&overwrite=OVERWRITE`, {
                 method: 'POST'
             });
 

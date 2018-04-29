@@ -21,11 +21,11 @@ module.exports = app => {
          * 貌似不支持缓存，文档写的不清楚
          * @returns {string}
          */
-        * getToken() {
+        async getToken() {
 
             app.logger.info(`[service:ddSns:getToken] start`);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/gettoken?appid=${appId}&appsecret=${appSecret}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/sns/gettoken?appid=${appId}&appsecret=${appSecret}`, {
                 dataType: 'json'
             });
             let resultData = result.data;
@@ -47,11 +47,11 @@ module.exports = app => {
          * @returns {*}
          */
 
-        * getPersistentCode(tmpAuthCode) {
-            let token = yield this.getToken();
+        async getPersistentCode(tmpAuthCode) {
+            let token = await this.getToken();
 
             app.logger.info(`[service:ddSns:getPersistentCode] start`);
-            const result = yield this.app.curl(`https://oapi.dingtalk.com/sns/get_persistent_code?access_token=${token}`, {
+            const result = await this.app.curl(`https://oapi.dingtalk.com/sns/get_persistent_code?access_token=${token}`, {
                 method: 'POST',
                 contentType: "json",
                 dataType: 'json',
@@ -77,13 +77,13 @@ module.exports = app => {
          * @param persistentCodeOptions
          * @returns {*}
          */
-        * getSnsToken(persistentCodeOptions) {
+        async getSnsToken(persistentCodeOptions) {
 
-            let token = yield this.getToken();
+            let token = await this.getToken();
 
             app.logger.info(`[service:ddSns:getSnsToken] start`);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/get_sns_token?access_token=${token}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/sns/get_sns_token?access_token=${token}`, {
                 method: 'POST',
                 contentType: "json",
                 dataType: 'json',
@@ -109,10 +109,10 @@ module.exports = app => {
          * @param snsToken
          * @returns {*}
          */
-        * getUserInfo(snsToken) {
+        async getUserInfo(snsToken) {
             app.logger.info(`[service:ddSns:getUserInfo] start`);
 
-            let result = yield this.app.curl(`https://oapi.dingtalk.com/sns/getuserinfo?sns_token=${snsToken}`, {
+            let result = await this.app.curl(`https://oapi.dingtalk.com/sns/getuserinfo?sns_token=${snsToken}`, {
                 dataType: 'json',
                 method: 'GET'
             });
@@ -127,13 +127,13 @@ module.exports = app => {
             return resultData.user_info;
         }
 
-        * getUserByPersistentCode(persistentCode) {
+        async getUserByPersistentCode(persistentCode) {
 
             app.logger.info(`[service:ddSns:getUserByPersistentCode] start`);
 
-            let snsToken = yield this.getSnsToken(persistentCode);
+            let snsToken = await this.getSnsToken(persistentCode);
 
-            let userInfo = yield this.getUserInfo(snsToken);
+            let userInfo = await this.getUserInfo(snsToken);
 
             app.logger.info(`[service:ddSns:getUserByPersistentCode] end`);
 

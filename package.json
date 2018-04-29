@@ -1,17 +1,17 @@
 {
   "name": "egg-dd-sdk",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "eggPlugin": {},
   "scripts": {
     "test": "egg-bin test"
   },
   "dependencies": {
+    "egg": "^2.7.1",
     "formstream": "^1.1.0",
+    "md5": "^2.2.1",
     "nodejs-dd-aes": "^0.0.3"
   },
   "devDependencies": {
-    "egg": "1.1.0",
-    "md5": "^2.2.1",
     "atool-build": "^0.9.0",
     "autod": "^2.7.1",
     "cheerio": "^0.22.0",
